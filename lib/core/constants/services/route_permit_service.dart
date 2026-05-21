@@ -1,0 +1,125 @@
+// ═══════════════════════════════════════════════════════════════════════════
+// route_permit_service.dart
+// Handles: GET /navigation/route/{routeId}/permit/
+// ═══════════════════════════════════════════════════════════════════════════
+
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:right_routes/models/route_permit_model.dart';
+import 'package:right_routes/views/home/home_api_constant/home_api_constant.dart';
+
+class RoutePermitService {
+  /// Fetches all permits for a given [routeId].
+  ///
+  /// Returns [RoutePermitResponse] on success, throws on network/parse failure.
+  static Future<RoutePermitResponse> fetchPermitsForRoute(
+      String routeId) async {
+    final url = Uri.parse(
+      '${HomeApiConstant.baseUrl}/navigation/route/$routeId/permit/',
+    );
+
+    debugPrint('🌐 [RoutePermitService] GET → $url');
+
+    final response = await http.get(url, headers: {
+      'Content-Type': 'application/json',
+    }).timeout(const Duration(seconds: 30));
+
+    debugPrint('✅ [RoutePermitService] Status: ${response.statusCode}');
+    debugPrint('📄 [RoutePermitService] Body: ${response.body}');
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      return RoutePermitResponse.fromJson(json);
+    } else {
+      throw Exception(
+        'RoutePermitService: HTTP ${response.statusCode} — ${response.body}',
+      );
+    }
+  }
+
+  /// Fetches all permits for [routeId] then returns the single [PermitItem]
+  /// matching [permitId]. Returns null if not found.
+  static Future<PermitItem?> fetchSinglePermit(
+    String routeId,
+    String permitId,
+  ) async {
+    final resp = await fetchPermitsForRoute(routeId);
+    final permitIdInt = int.tryParse(permitId);
+    if (permitIdInt == null) return null;
+
+    try {
+      return resp.data.permits.firstWhere((p) => p.id == permitIdInt);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Starts driving for a route.
+  /// POST /navigation/route/{routeId}/permit/drive-start/
+  static Future<bool> startDrive(String routeId) async {
+    final url = Uri.parse(
+      '${HomeApiConstant.baseUrl}/navigation/route/$routeId/permit/drive-start/',
+    );
+
+    debugPrint('🌐 [RoutePermitService] POST → $url');
+
+    try {
+      final response = await http.post(url, headers: {
+        'Content-Type': 'application/json',
+      }).timeout(const Duration(seconds: 15));
+
+      debugPrint(
+          '✅ [RoutePermitService] drive-start Status: ${response.statusCode}');
+      return response.statusCode == 200 || response.statusCode == 201;
+    } catch (e) {
+      debugPrint('❌ [RoutePermitService] drive-start error: $e');
+      return false;
+    }
+  }
+
+  /// Stops driving for a route.
+  /// POST /navigation/route/{routeId}/permit/drive-stop/
+  static Future<bool> stopDrive(String routeId) async {
+    final url = Uri.parse(
+      '${HomeApiConstant.baseUrl}/navigation/route/$routeId/permit/drive-stop/',
+    );
+
+    debugPrint('🌐 [RoutePermitService] POST → $url');
+
+    try {
+      final response = await http.post(url, headers: {
+        'Content-Type': 'application/json',
+      }).timeout(const Duration(seconds: 15));
+
+      debugPrint(
+          '✅ [RoutePermitService] drive-stop Status: ${response.statusCode}');
+      return response.statusCode == 200 || response.statusCode == 201;
+    } catch (e) {
+      debugPrint('❌ [RoutePermitService] drive-stop error: $e');
+      return false;
+    }
+  }
+
+  /// Deletes a permit for a given [routeId] and [permitId].
+  /// DELETE /navigation/route/{routeId}/permit/{permitId}/
+  static Future<bool> deletePermit(String routeId, String permitId) async {
+    final url = Uri.parse(
+      '${HomeApiConstant.baseUrl}/navigation/route/$routeId/permit/$permitId/',
+    );
+
+    debugPrint('🌐 [RoutePermitService] DELETE → $url');
+
+    try {
+      final response = await http.delete(url, headers: {
+        'Content-Type': 'application/json',
+      }).timeout(const Duration(seconds: 15));
+
+      debugPrint('✅ [RoutePermitService] deletePermit Status: ${response.statusCode}');
+      return response.statusCode == 200 || response.statusCode == 204;
+    } catch (e) {
+      debugPrint('❌ [RoutePermitService] deletePermit error: $e');
+      return false;
+    }
+  }
+}

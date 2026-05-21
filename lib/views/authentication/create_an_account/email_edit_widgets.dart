@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+class EmailEditWidgets extends StatelessWidget {
+  final String email;
+  final VoidCallback onEditTap;
+
+  const EmailEditWidgets({
+    super.key,
+    required this.email,
+    required this.onEditTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 382.w,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,   // IMPORTANT FIX ✔
+        mainAxisAlignment: MainAxisAlignment.start,     // FIX ✔
+        children: [
+
+          /// TOP TEXT
+           Text(
+            "Create your account using",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontFamily: 'Lato',
+              fontWeight: FontWeight.w500,
+              height: 1.44,
+            ),
+          ),
+
+          SizedBox(height: 6),
+
+          /// INLINE ROW (email + edit)
+          Row(
+            mainAxisSize: MainAxisSize.min,              // FIX ✔ keeps row tight
+            children: [
+              Text(
+                email,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: 'Lato',
+                  fontWeight: FontWeight.w900,
+                  height: 1.44,
+                ),
+              ),
+              SizedBox(width: 6),
+              GestureDetector(
+                onTap: onEditTap,
+                child: const Text(
+                  "edit",
+                  style: TextStyle(
+                    color: Color(0xFF9DACF5),
+                    fontSize: 18,
+                    fontFamily: 'Lato',
+                    fontWeight: FontWeight.w600,
+                    height: 1.44,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
