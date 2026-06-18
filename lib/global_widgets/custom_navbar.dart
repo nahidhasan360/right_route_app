@@ -77,13 +77,13 @@
 //           // + bottom padding for gesture bar (Android/iOS)
 //           height: 65.h + MediaQuery.of(context).padding.bottom,
 //           width: double.infinity,
-//           decoration: const BoxDecoration(
+//           decoration: BoxDecoration(
 //             // ✅ FIX: Dark navy color — screenshot match
 //             color: Color(0xFF0D1230),
 //             border: Border(
 //               top: BorderSide(
 //                 color: Color(0xFF1C2448),
-//                 width: 1,
+//                 width: 1.w,
 //               ),
 //             ),
 //           ),
@@ -185,6 +185,7 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:right_routes/core/routes/all_routes.dart';
@@ -222,9 +223,9 @@ class _CustomNavbarState extends State<CustomNavbar> {
       builder: (controller) {
         return Container(
           // ✅ FIX 3: Fixed height — SafeArea + bottomPadding handle করছে
-          height: 65 + MediaQuery.of(context).padding.bottom,
+          height: 65.h + MediaQuery.of(context).padding.bottom,
           width: double.infinity,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Color(0xFF5A5A5A),
           ),
           child: SafeArea(
@@ -284,7 +285,7 @@ class _CustomNavbarState extends State<CustomNavbar> {
         Get.offAllNamed(route);
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
         color: Colors.transparent,
         child: FittedBox(
           fit: BoxFit.scaleDown,
@@ -294,18 +295,18 @@ class _CustomNavbarState extends State<CustomNavbar> {
             children: [
               SvgPicture.asset(
                 svgIcon,
-                width: 26,
-                height: 26,
+                width: 26.w,
+                height: 26.h,
                 colorFilter: ColorFilter.mode(
                   isSelected ? const Color(0xFFFF8742) : Colors.white,
                   BlendMode.srcIn,
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: 2.h),
               Text(
                 label,
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 12.sp,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   color: isSelected ? const Color(0xFFFF8742) : Colors.white,
                 ),

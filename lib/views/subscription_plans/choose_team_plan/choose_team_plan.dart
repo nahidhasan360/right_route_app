@@ -28,24 +28,27 @@ class ChooseATeamPlan extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              SizedBox(height: 44),
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15.w),
+            child: Column(
+              children: [
+                SizedBox(height: 20.h),
               /// 🔥 FIXED LOGO (STICKY – does not scroll)
-              Container(
-                width: 225,
-                height: 112,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(ImageManager.splashScreenLogo),
-                    fit: BoxFit.contain,
+              Center(
+                child: Container(
+                  width: 225.w,
+                  height: 112.h,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(ImageManager.splashScreenLogo),
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),
 
-              SizedBox(height: 29),
+              SizedBox(height: 29.h),
 
               /// 🔥 SCROLLABLE CONTENT (everything below logo)
               Expanded(
@@ -57,31 +60,31 @@ class ChooseATeamPlan extends StatelessWidget {
                         'CHOOSE A TEAM PLAN',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 32,
+                          fontSize: 32.sp,
                           fontFamily: 'League Gothic',
                           fontWeight: FontWeight.w400,
-                          height: 0.88,
+                          height: 0.88.h,
                           letterSpacing: 1,
                         ),
                         textAlign: TextAlign.center,
                       ),
 
-                      SizedBox(height: 22),
+                      SizedBox(height: 22.h),
 
                       /// Subtitle
                       Text(
-                        'Plans include in-app Team Manager control panel. Cancel anytime.',
+                        'Plans include dashboard, seat\nmanagement, support, and on-\nboarding. Cancel anytime.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w500,
                           height: 1.44,
                         ),
                       ),
 
-                      SizedBox(height: 19),
+                      SizedBox(height: 19.h),
 
                       /// 🔹 Plan Tiles (Set 1)
                       Obx(() => _planTile(
@@ -91,7 +94,7 @@ class ChooseATeamPlan extends StatelessWidget {
                         selected: controller.selected.value == "plan5",
                         onTap: () => controller.selected.value = "plan5",
                       )),
-                      SizedBox(height: 12),
+                      SizedBox(height: 12.h),
 
                       Obx(() => _planTile(
                         title: "UP TO 10 DRIVERS",
@@ -100,7 +103,7 @@ class ChooseATeamPlan extends StatelessWidget {
                         selected: controller.selected.value == "plan10",
                         onTap: () => controller.selected.value = "plan10",
                       )),
-                      SizedBox(height: 12),
+                      SizedBox(height: 12.h),
 
                       Obx(() => _planTile(
                         title: "UP TO 25 DRIVERS",
@@ -109,53 +112,49 @@ class ChooseATeamPlan extends StatelessWidget {
                         selected: controller.selected.value == "plan25",
                         onTap: () => controller.selected.value = "plan25",
                       )),
-                      SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       /// 🔹 Plan Tiles (Set 2) – optional duplicate, different keys
                       Obx(() => _planTile(
                         title: "UP TO 50 DRIVERS",
-                        price: "\$399/MO",
+                        price: "\$449/MO",
                         badge: null,
                         selected: controller.selected.value == "plan50",
                         onTap: () => controller.selected.value = "plan50",
                       )),
-                      SizedBox(height: 12),
+                      SizedBox(height: 12.h),
 
                       Obx(() => _planTile(
                         title: "UP TO 100 DRIVERS",
-                        price: "\$599/MO",
+                        price: "\$749/MO",
                         badge: null,
                         selected: controller.selected.value == "plan100",
                         onTap: () => controller.selected.value = "plan100",
                       )),
-                      SizedBox(height: 12),
-                      Obx(() => _planTile(
-                        title: "UP TO 250 DRIVERS",
-                        price: "\$1247/MO",
-                        badge: null,
-                        selected: controller.selected.value == "plan250",
-                        onTap: () => controller.selected.value = "plan250",
-                      )),
-                      SizedBox(height: 12),
-                      Obx(() => _planTile(
-                        title: "UP TO 500 DRIVERS",
-                        price: "\$1995/MO",
-                        badge: null,
-                        selected: controller.selected.value == "plan500",
-                        onTap: () => controller.selected.value = "plan500"
-                            "",
-                      )),
-                      SizedBox(height: 12),
+                      SizedBox(height: 10.h),
 
-                      Obx(() => _planTile(
-                        title: "UP TO 1000 DRIVERS",
-                        price: "\$2990/MO",
-                        badge: null,
-                        selected: controller.selected.value == "plan1000",
-                        onTap: () => controller.selected.value = "plan1000",
-                      )),
-
-
-                      SizedBox(height: 11),
+                      SizedBox(
+                        width: 392.w,
+                        child: Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Have more than 100 drivers? Contact sales or fill out the Fleet Pricing Request form on our website:\n',
+                                style: TextStyle(color: Colors.white, fontSize: 16.sp, fontFamily: 'Lato', fontWeight: FontWeight.w400, height: 1.44),
+                              ),
+                              TextSpan(
+                                text: 'sales@getrightroute.app\n',
+                                style: TextStyle(color: Colors.white, fontSize: 16.sp, fontFamily: 'Lato', fontWeight: FontWeight.w700, decoration: TextDecoration.underline, height: 1.44),
+                              ),
+                              TextSpan(
+                                text: 'https://getrightroute.app',
+                                style: TextStyle(color: Colors.white, fontSize: 16.sp, fontFamily: 'Lato', fontWeight: FontWeight.w700, decoration: TextDecoration.underline, height: 1.44),
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                      SizedBox(height: 25.h),
 
                       /// AGREEMENT + BUTTONS
                       TextButton(
@@ -164,35 +163,61 @@ class ChooseATeamPlan extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
-                              'By clicking "Subscribe", you agree to the',
+                              'By clicking "Subscribe", you agree to\nour',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 18,
+                                fontSize: 16.sp,
                                 fontFamily: 'Lato',
-                                fontWeight: FontWeight.w500,
-                                height: 1.67,
+                                fontWeight: FontWeight.w400,
+                                height: 1.20,
                               ),
                             ),
+                            SizedBox(height: 8.h),
 
                             GestureDetector(
                               onTap: () {
                                 Get.toNamed(AppRoutes.subscriberAgreement);
                               },
-                              child: Text(
-                                'RIGHT ROUTE SUBSCRIBER AGREEMENT',
-                                style: TextStyle(
-                                  color: AppColors.purple,
-                                  fontSize: 20,
-                                  fontFamily: 'League Gothic',
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.50,
-                                  letterSpacing: 1,
+                              child: Text.rich(
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'DISCLAIMER ',
+                                      style: TextStyle(
+                                        color: AppColors.purple,
+                                        fontSize: 20.sp,
+                                        fontFamily: 'League Gothic',
+                                        fontWeight: FontWeight.w400,
+                                        letterSpacing: 1,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: 'and ',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.sp,
+                                        fontFamily: 'Lato',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text: 'TERMS OF SERVICE',
+                                      style: TextStyle(
+                                        color: AppColors.purple,
+                                        fontSize: 20.sp,
+                                        fontFamily: 'League Gothic',
+                                        fontWeight: FontWeight.w400,
+                                        letterSpacing: 1,
+                                      ),
+                                    ),
+                                  ],
                                 ),
+                                textAlign: TextAlign.center,
                               ),
                             ),
 
-                            SizedBox(height: 23),
+                            SizedBox(height: 23.h),
 
                             /// SUBSCRIBE BUTTON
                             ButtonReusable(
@@ -200,11 +225,11 @@ class ChooseATeamPlan extends StatelessWidget {
                               onPressed: () {
                                 Get.offAllNamed(AppRoutes.teamManager);
                               },
-                              width: 250,
-                              height: 55,
+                              width: 250.w,
+                              height: 55.h,
                             ),
 
-                            SizedBox(height: 6),
+                            SizedBox(height: 6.h),
 
                             // TextButton(
                             //   onPressed: () {},
@@ -215,12 +240,12 @@ class ChooseATeamPlan extends StatelessWidget {
                             //       fontSize: 20.sp,
                             //       fontFamily: 'League Gothic',
                             //       fontWeight: FontWeight.w400,
-                            //       height: 1.50,
+                            //       height: 1.50.h,
                             //     ),
                             //   ),
                             // ),
 
-                            SizedBox(height: 47),
+                            SizedBox(height: 47.h),
 
                             /// RESTORE SUBSCRIPTION
                             TextButton(
@@ -231,7 +256,7 @@ class ChooseATeamPlan extends StatelessWidget {
                                     'Already a subscriber?',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 16,
+                                      fontSize: 16.sp,
                                       fontFamily: 'Lato',
                                       fontWeight: FontWeight.w500,
                                       height: 1.75,
@@ -241,7 +266,7 @@ class ChooseATeamPlan extends StatelessWidget {
                                     'RESTORE SUBSCRIPTION',
                                     style: TextStyle(
                                       color: AppColors.purple,
-                                      fontSize: 20,
+                                      fontSize: 20.sp,
                                       fontFamily: 'League Gothic',
                                       fontWeight: FontWeight.w400,
                                       height: 1.40,
@@ -252,7 +277,7 @@ class ChooseATeamPlan extends StatelessWidget {
                               ),
                             ),
 
-                            SizedBox(height: 140),
+                            SizedBox(height: 70.h),
                           ],
                         ),
                       ),
@@ -262,6 +287,7 @@ class ChooseATeamPlan extends StatelessWidget {
               ),
             ],
           ),
+        ),
         ),
       ),
     );
@@ -279,23 +305,23 @@ Widget _planTile({
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      width: 392,
-      height: 53,
+      width: 392.w,
+      height: 53.h,
       padding: EdgeInsets.symmetric(horizontal: 8.w),
       decoration: BoxDecoration(
         color: selected ? AppColors.orange : AppColors.darkGray,
-        border: Border.all(width: 1, color: AppColors.medGray),
+        border: Border.all(width: 1.w, color: AppColors.medGray),
       ),
       child: Row(
         children: [
           /// CHECK CIRCLE
           Container(
-            width: 24,
-            height: 24,
+            width: 24.w,
+            height: 24.h,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: selected
-                  ? Border.all(color: Colors.white, width: 2)
+                  ? Border.all(color: Colors.white, width: 2.w)
                   : null,
               color: selected
                   ? AppColors.checkBoxColor
@@ -306,14 +332,14 @@ Widget _planTile({
                 : null,
           ),
 
-          SizedBox(width: 7),
+          SizedBox(width: 7.w),
 
           /// TITLE
           Text(
             title,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 24,
+              fontSize: 24.sp,
               fontFamily: 'League Gothic',
               fontWeight: FontWeight.w400,
               letterSpacing: 1,
@@ -332,7 +358,7 @@ Widget _planTile({
                 price,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 24,
+                  fontSize: 24.sp,
                   fontFamily: 'League Gothic',
                   fontWeight: FontWeight.w400,
                   letterSpacing: 1,
@@ -341,17 +367,17 @@ Widget _planTile({
 
               if (badge != null)
                 Container(
-                  margin: EdgeInsets.only(top: 6),
-                  padding: EdgeInsets.symmetric(horizontal: 9),
+                  margin: EdgeInsets.only(top: 6.h),
+                  padding: EdgeInsets.symmetric(horizontal: 9.w),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(5.r),
                   ),
                   child: Text(
                     badge,
                     style: TextStyle(
                       color: AppColors.medGray,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontFamily: 'Lato',
                       fontWeight: FontWeight.w700,
                     ),

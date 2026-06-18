@@ -18,6 +18,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:right_routes/core/constants/services/api_client.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 
 import 'package:right_routes/global_widgets/custom_navbar.dart';
@@ -372,7 +373,7 @@ class ViewPermitController extends GetxController {
 
     for (int attempt = 0; attempt <= _osrmMaxRetries; attempt++) {
       try {
-        final response = await http.get(uri,
+        final response = await ApiClient.get(uri,
             headers: {'User-Agent': 'RightRoutes/1.0'}).timeout(_osrmTimeout);
 
         if (response.statusCode == 200) {
@@ -537,7 +538,7 @@ class ViewPermitController extends GetxController {
         request.fields['longitude'] = point.longitude.toString();
         request.fields['name'] = address;
 
-        final response = await request.send();
+        final response = await ApiClient.sendMultipartRequest(request);
         if (response.statusCode == 201 || response.statusCode == 200) {
           final respStr = await response.stream.bytesToString();
           final data = json.decode(respStr);
@@ -624,7 +625,7 @@ class ViewPermitController extends GetxController {
         request.fields['longitude'] = point.longitude.toString();
         request.fields['name'] = name;
 
-        final response = await request.send();
+        final response = await ApiClient.sendMultipartRequest(request);
         if (response.statusCode == 200 || response.statusCode == 201) {
           Get.snackbar('Success', 'Waypoint updated on server',
               backgroundColor: Colors.green, colorText: Colors.white);
@@ -734,7 +735,7 @@ class ViewPermitController extends GetxController {
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
 class ViewPermitScreen extends StatelessWidget {
-  ViewPermitScreen({super.key});
+  const ViewPermitScreen({super.key});
 
   static const String _kMapStyle =
       'https://api.maptiler.com/maps/openstreetmap/style.json?key=dHNKoVs9jL46w6oUpFt3';
@@ -829,89 +830,89 @@ class ViewPermitScreen extends StatelessWidget {
                       children: [
                         Center(
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            padding: EdgeInsets.symmetric(horizontal: 20),
                             child: Text(
                               'PERMIT DETAILS',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.white,
-                                fontSize: 32,
+                                fontSize: 32.sp,
                                 fontFamily: 'League Gothic',
                                 fontWeight: FontWeight.w400,
-                                height: 0.88,
+                                height: 0.88.h,
                                 letterSpacing: 1.50,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 14),
+                        SizedBox(height: 14.h),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: EdgeInsets.symmetric(horizontal: 20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _sectionLabel('Route Name'),
-                              const SizedBox(height: 6),
+                              SizedBox(height: 6.h),
                               _buildRouteNameField(context, ctrl),
-                              const SizedBox(height: 14),
+                              SizedBox(height: 14.h),
                               Row(
                                 children: [
                                   _sectionLabel('Enter Permit Directions'),
-                                  const SizedBox(width: 6),
+                                  SizedBox(width: 6.w),
                                   SvgPicture.asset(
                                     'assets/icons/Question-Box-gray.svg',
-                                    width: 16,
-                                    height: 16,
+                                    width: 16.w,
+                                    height: 16.h,
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8.h),
                               Row(
                                 children: [
                                   _permitIconBtn(Icons.upload_file),
-                                  const SizedBox(width: 8),
+                                  SizedBox(width: 8.w),
                                   _permitIconBtn(Icons.camera_alt_outlined),
                                 ],
                               ),
-                              const SizedBox(height: 12),
+                              SizedBox(height: 12.h),
                             ],
                           ),
                         ),
                         _buildMapSection(ctrl),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: EdgeInsets.symmetric(horizontal: 20),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 12),
+                              SizedBox(height: 12.h),
                               _buildActionButtonsRow(context, ctrl),
-                              const SizedBox(height: 16),
+                              SizedBox(height: 16.h),
                               _buildWaypointsSectionHeader(context, ctrl),
-                              const SizedBox(height: 8),
+                              SizedBox(height: 8.h),
                               Text(
                                 permit.title,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.medGray,
-                                  fontSize: 12,
+                                  fontSize: 12.sp,
                                   fontFamily: 'Lato',
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              const SizedBox(height: 10),
+                              SizedBox(height: 10.h),
                               _buildWaypointList(ctrl, context),
-                              const SizedBox(height: 14),
+                              SizedBox(height: 14.h),
                               Obx(() => Text(
                                     'Total miles: ${ctrl.distance.value.replaceAll(' miles', '')}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: AppColors.white,
-                                      fontSize: 13,
+                                      fontSize: 13.sp,
                                       fontFamily: 'Lato',
                                       fontWeight: FontWeight.w500,
                                     ),
                                   )),
                               // PDF file section removed
-                              const SizedBox(height: 18),
+                              SizedBox(height: 18.h),
                               _buildBottomButtons(ctrl, context),
-                              const SizedBox(height: 24),
+                              SizedBox(height: 24.h),
                             ],
                           ),
                         ),
@@ -933,14 +934,14 @@ class ViewPermitScreen extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 260.h,
-      margin: const EdgeInsets.symmetric(horizontal: 20),
+      margin: EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
         color: const Color(0xFF1E2E3E),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: _C.borderSubtle, width: 1.5),
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: _C.borderSubtle, width: 1.5.w),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(11),
+        borderRadius: BorderRadius.circular(11.r),
         child: Stack(
           children: [
             MapLibreMap(
@@ -968,7 +969,7 @@ class ViewPermitScreen extends StatelessWidget {
               child: Column(
                 children: [
                   _zoomBtn(Icons.add, ctrl.zoomIn),
-                  const SizedBox(height: 6),
+                  SizedBox(height: 6.h),
                   _zoomBtn(Icons.remove, ctrl.zoomOut),
                 ],
               ),
@@ -978,22 +979,22 @@ class ViewPermitScreen extends StatelessWidget {
             Obx(() {
               if (ctrl.isAddingPinMode.value) {
                 return Container(
-                  color: Colors.black.withOpacity(0.4),
-                  padding: const EdgeInsets.all(8),
-                  child: const Center(
+                  color: Colors.black.withValues(alpha: 0.4),
+                  padding: EdgeInsets.all(8),
+                  child: Center(
                     child: Text(
                       'Tap anywhere on the map to add a pin',
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        fontSize: 14.sp,
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
                 );
               }
-              return const SizedBox.shrink();
+              return SizedBox.shrink();
             }),
 
             // Loading overlay
@@ -1001,25 +1002,25 @@ class ViewPermitScreen extends StatelessWidget {
               if (ctrl.isRouteLoading.value) {
                 return Positioned.fill(
                   child: Container(
-                    color: Colors.black.withOpacity(0.35),
+                    color: Colors.black.withValues(alpha: 0.35),
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const SizedBox(
-                            width: 32,
-                            height: 32,
+                          SizedBox(
+                            width: 32.w,
+                            height: 32.h,
                             child: CircularProgressIndicator(
                               strokeWidth: 3.5,
                               color: AppColors.orange,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          const Text(
+                          SizedBox(height: 8.h),
+                          Text(
                             'Updating route...',
                             style: TextStyle(
                               color: AppColors.white,
-                              fontSize: 12,
+                              fontSize: 12.sp,
                               fontFamily: 'Lato',
                               fontWeight: FontWeight.bold,
                             ),
@@ -1030,7 +1031,7 @@ class ViewPermitScreen extends StatelessWidget {
                   ),
                 );
               }
-              return const SizedBox.shrink();
+              return SizedBox.shrink();
             }),
           ],
         ),
@@ -1053,7 +1054,7 @@ class ViewPermitScreen extends StatelessWidget {
                 ctrl.toggleAddPinMode();
               },
             )),
-        const SizedBox(width: 6),
+        SizedBox(width: 6.w),
         _actionBtn(
           'Delete Pin',
           color: const Color(0xFFCC2222),
@@ -1062,7 +1063,7 @@ class ViewPermitScreen extends StatelessWidget {
             ctrl.deleteSelectedWaypoint();
           },
         ),
-        const SizedBox(width: 6),
+        SizedBox(width: 6.w),
         _actionBtn(
           'Update',
           color: _C.green,
@@ -1079,33 +1080,33 @@ class ViewPermitScreen extends StatelessWidget {
       BuildContext context, ViewPermitController ctrl) {
     return Row(
       children: [
-        const Text(
+        Text(
           'Permit Add/Edit Waypoints',
           style: TextStyle(
             color: AppColors.white,
-            fontSize: 15,
+            fontSize: 15.sp,
             fontFamily: 'Lato',
             fontWeight: FontWeight.w700,
             letterSpacing: 0.2,
           ),
         ),
-        const SizedBox(width: 8),
+        SizedBox(width: 8.w),
         GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
             showWaypointsInfoDialog(context);
           },
           child: Container(
-            width: 20,
-            height: 20,
+            width: 20.w,
+            height: 20.h,
             decoration: BoxDecoration(
-                color: _C.blueBadge, borderRadius: BorderRadius.circular(5)),
-            child: const Center(
+                color: _C.blueBadge, borderRadius: BorderRadius.circular(5.r)),
+            child: Center(
               child: Text(
                 '?',
                 style: TextStyle(
                   color: AppColors.white,
-                  fontSize: 12,
+                  fontSize: 12.sp,
                   fontFamily: 'Lato',
                   fontWeight: FontWeight.w700,
                 ),
@@ -1121,12 +1122,12 @@ class ViewPermitScreen extends StatelessWidget {
     return Obx(() {
       if (ctrl.waypoints.isEmpty) {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12),
+          padding: EdgeInsets.symmetric(vertical: 12),
           child: Text(
             'No waypoints added',
             style: TextStyle(
-              color: AppColors.white.withOpacity(0.4),
-              fontSize: 14,
+              color: AppColors.white.withValues(alpha: 0.4),
+              fontSize: 14.sp,
               fontFamily: 'Lato',
             ),
           ),
@@ -1134,8 +1135,9 @@ class ViewPermitScreen extends StatelessWidget {
       }
       return Column(
         children: List.generate(ctrl.waypoints.length, (i) {
-          if (i >= ctrl.waypointControllers.length)
-            return const SizedBox.shrink();
+          if (i >= ctrl.waypointControllers.length) {
+            return SizedBox.shrink();
+          }
           return Column(
             children: [
               _buildWaypointRow(ctrl, i, context),
@@ -1153,7 +1155,7 @@ class ViewPermitScreen extends StatelessWidget {
     return Obx(() {
       if (index >= ctrl.waypoints.length ||
           index >= ctrl.waypointControllers.length) {
-        return const SizedBox.shrink();
+        return SizedBox.shrink();
       }
 
       final isFirst = index == 0;
@@ -1179,26 +1181,26 @@ class ViewPermitScreen extends StatelessWidget {
       return GestureDetector(
         onTap: () => ctrl.selectWaypoint(index),
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 6),
+          padding: EdgeInsets.only(bottom: 6),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                width: 28,
-                height: 44,
+                width: 28.w,
+                height: 44.h,
                 child: Icon(Icons.drag_indicator,
-                    color: AppColors.white.withOpacity(0.55), size: 18),
+                    color: AppColors.white.withValues(alpha: 0.55), size: 18),
               ),
-              const SizedBox(width: 4),
+              SizedBox(width: 4.w),
               Expanded(
                 child: Container(
-                  height: 44,
+                  height: 44.h,
                   decoration: BoxDecoration(
                     color: bg,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8.r),
                     border: Border.all(color: borderColor, width: borderWidth),
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
                     children: [
                       Expanded(
@@ -1208,7 +1210,7 @@ class ViewPermitScreen extends StatelessWidget {
                           textAlignVertical: TextAlignVertical.center,
                           style: TextStyle(
                               color: textColor,
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontFamily: 'Lato',
                               fontWeight: FontWeight.w400),
                           cursorColor:
@@ -1224,13 +1226,13 @@ class ViewPermitScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: 6.w),
                       Container(
-                        width: 28,
-                        height: 28,
+                        width: 28.w,
+                        height: 28.h,
                         decoration: BoxDecoration(
                             color: AppColors.orange,
-                            borderRadius: BorderRadius.circular(6)),
+                            borderRadius: BorderRadius.circular(6.r)),
                         child: const Icon(Icons.gps_fixed,
                             color: AppColors.white, size: 15),
                       ),
@@ -1240,7 +1242,7 @@ class ViewPermitScreen extends StatelessWidget {
               ),
               if (!isFirst)
                 Padding(
-                  padding: const EdgeInsets.only(left: 8),
+                  padding: EdgeInsets.only(left: 8),
                   child: GestureDetector(
                     onTap: () {
                       FocusScope.of(context).unfocus();
@@ -1248,11 +1250,11 @@ class ViewPermitScreen extends StatelessWidget {
                       ctrl.deleteSelectedWaypoint();
                     },
                     child: SvgPicture.asset('assets/icons/Close-X-white.svg',
-                        width: 22, height: 22),
+                        width: 22.w, height: 22.h),
                   ),
                 )
               else
-                const SizedBox(width: 30),
+                SizedBox(width: 30.w),
             ],
           ),
         ),
@@ -1263,7 +1265,7 @@ class ViewPermitScreen extends StatelessWidget {
   Widget _buildAddButton(
       ViewPermitController ctrl, int index, BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 2),
+      margin: EdgeInsets.only(bottom: 2),
       child: Row(
         children: [
           GestureDetector(
@@ -1273,12 +1275,12 @@ class ViewPermitScreen extends StatelessWidget {
             },
             child: SvgPicture.asset(
                 'assets/icons/Check-Box-gray-white-border.svg',
-                width: 24,
-                height: 24),
+                width: 24.w,
+                height: 24.h),
           ),
-          const SizedBox(width: 4),
-          Container(width: 29, height: 2, color: AppColors.dividerColor),
-          const SizedBox(width: 34),
+          SizedBox(width: 4.w),
+          Container(width: 29.w, height: 2.h, color: AppColors.dividerColor),
+          SizedBox(width: 34.w),
         ],
       ),
     );
@@ -1289,7 +1291,7 @@ class ViewPermitScreen extends StatelessWidget {
       children: [
         Expanded(
           child: SizedBox(
-            height: 42,
+            height: 42.h,
             child: ElevatedButton(
               onPressed: () {
                 FocusScope.of(context).unfocus();
@@ -1318,15 +1320,15 @@ class ViewPermitScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: _C.green,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10.r)),
                 elevation: 0,
               ),
-              child: const Text(
+              child: Text(
                 'PREVIEW',
                 style: TextStyle(
                   color: AppColors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontFamily: 'Bebas Neue',
                   letterSpacing: 2,
                 ),
@@ -1334,10 +1336,10 @@ class ViewPermitScreen extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12.w),
         Expanded(
           child: SizedBox(
-            height: 42,
+            height: 42.h,
             child: ElevatedButton(
               onPressed: () {
                 FocusScope.of(context).unfocus();
@@ -1346,15 +1348,15 @@ class ViewPermitScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.orange,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
+                    borderRadius: BorderRadius.circular(10.r)),
                 elevation: 0,
               ),
-              child: const Text(
+              child: Text(
                 'BACK',
                 style: TextStyle(
                   color: AppColors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontFamily: 'Bebas Neue',
                   letterSpacing: 2,
                 ),
@@ -1368,9 +1370,9 @@ class ViewPermitScreen extends StatelessWidget {
 
   Widget _sectionLabel(String text) => Text(
         text,
-        style: const TextStyle(
+        style: TextStyle(
           color: Color(0xFFB0C4D0),
-          fontSize: 13,
+          fontSize: 13.sp,
           fontFamily: 'Lato',
           fontWeight: FontWeight.w500,
           letterSpacing: 0.1,
@@ -1380,10 +1382,10 @@ class ViewPermitScreen extends StatelessWidget {
   Widget _buildRouteNameField(BuildContext context, ViewPermitController ctrl) {
     return Container(
       width: double.infinity,
-      height: 50,
+      height: 50.h,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10.r),
         border: Border.all(color: _C.borderSubtle, width: 1),
       ),
       child: TextField(
@@ -1391,22 +1393,22 @@ class ViewPermitScreen extends StatelessWidget {
         onChanged: ctrl.updateRouteName,
         textAlign: TextAlign.start,
         textAlignVertical: TextAlignVertical.center,
-        style: const TextStyle(
+        style: TextStyle(
             color: AppColors.darkGray,
-            fontSize: 16,
+            fontSize: 16.sp,
             fontFamily: 'Lato',
             fontWeight: FontWeight.w400),
         cursorColor: AppColors.darkGray,
         cursorHeight: 20,
         textInputAction: TextInputAction.done,
         onSubmitted: (_) => FocusScope.of(context).unfocus(),
-        decoration: const InputDecoration(
+        decoration: InputDecoration(
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(horizontal: 14),
           hintText: 'Name Your Route',
           hintStyle: TextStyle(
               color: Color(0xFF9AA8B2),
-              fontSize: 16,
+              fontSize: 16.sp,
               fontFamily: 'Lato',
               fontWeight: FontWeight.w400),
           isDense: false,
@@ -1417,10 +1419,10 @@ class ViewPermitScreen extends StatelessWidget {
 
   Widget _permitIconBtn(IconData icon) {
     return Container(
-      width: 38,
-      height: 38,
+      width: 38.w,
+      height: 38.h,
       decoration: BoxDecoration(
-          color: AppColors.orange, borderRadius: BorderRadius.circular(6)),
+          color: AppColors.orange, borderRadius: BorderRadius.circular(6.r)),
       child: Icon(icon, color: AppColors.white, size: 20),
     );
   }
@@ -1429,20 +1431,20 @@ class ViewPermitScreen extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 36,
-        height: 36,
+        width: 36.w,
+        height: 36.h,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(5.r),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withOpacity(0.26),
+              color: AppColors.black.withValues(alpha: 0.26),
               blurRadius: 4,
               offset: const Offset(0, 2),
             ),
           ],
         ),
-        child: Icon(icon, color: AppColors.black.withOpacity(0.87), size: 22),
+        child: Icon(icon, color: AppColors.black.withValues(alpha: 0.87), size: 22),
       ),
     );
   }
@@ -1452,13 +1454,13 @@ class ViewPermitScreen extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
           boxShadow: [
             BoxShadow(
-              color: AppColors.black.withOpacity(0.25),
+              color: AppColors.black.withValues(alpha: 0.25),
               blurRadius: 3,
               offset: const Offset(0, 1),
             ),
@@ -1466,9 +1468,9 @@ class ViewPermitScreen extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.white,
-            fontSize: 11,
+            fontSize: 11.sp,
             fontWeight: FontWeight.w700,
             fontFamily: 'Lato',
             letterSpacing: 0.3,
@@ -1489,12 +1491,12 @@ void showConfirmRouteInfoDialog(BuildContext context) {
     builder: (_) => Dialog(
       backgroundColor: Colors.transparent,
       insetPadding:
-          const EdgeInsets.only(top: 60, bottom: 100, left: 20, right: 20),
+          EdgeInsets.only(top: 60, bottom: 100, left: 20, right: 20),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: const Color(0xFF2A3A4A),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
           border: Border.all(color: const Color(0xFF3A4A5A), width: 1),
         ),
         child: Column(
@@ -1504,25 +1506,25 @@ void showConfirmRouteInfoDialog(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SvgPicture.asset('assets/icons/Vector-hand.svg',
-                    width: 24, height: 24),
+                    width: 24.w, height: 24.h),
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: SvgPicture.asset('assets/icons/Close-X-Circle.svg',
-                      width: 24, height: 24),
+                      width: 24.w, height: 24.h),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             Flexible(
               child: SingleChildScrollView(
                 child: Text.rich(
                   TextSpan(
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.white,
-                      fontSize: 15,
+                      fontSize: 15.sp,
                       fontFamily: 'Lato',
                       fontWeight: FontWeight.w400,
-                      height: 1.55,
+                      height: 1.55.h,
                     ),
                     children: const [
                       TextSpan(
@@ -1577,12 +1579,12 @@ void showWaypointsInfoDialog(BuildContext context) {
     builder: (_) => Dialog(
       backgroundColor: Colors.transparent,
       insetPadding:
-          const EdgeInsets.only(top: 60, bottom: 100, left: 20, right: 20),
+          EdgeInsets.only(top: 60, bottom: 100, left: 20, right: 20),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: const Color(0xFF2A3A4A),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
           border: Border.all(color: const Color(0xFF3A4A5A), width: 1),
         ),
         child: Column(
@@ -1596,14 +1598,14 @@ void showWaypointsInfoDialog(BuildContext context) {
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: SvgPicture.asset('assets/icons/Close-X-Circle.svg',
-                      width: 24, height: 24),
+                      width: 24.w, height: 24.h),
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
             Flexible(
               child: SingleChildScrollView(
-                child: const Text(
+                child: Text(
                   'Tap inside a field to select a waypoint.\n'
                   'Tap the "+" icon to add a field.\n'
                   'Tap the "X" icon to remove that waypoint.\n'
@@ -1612,10 +1614,10 @@ void showWaypointsInfoDialog(BuildContext context) {
                   'Tap Update to refresh your route before clicking PREVIEW.',
                   style: TextStyle(
                     color: AppColors.white,
-                    fontSize: 15,
+                    fontSize: 15.sp,
                     fontFamily: 'Lato',
                     fontWeight: FontWeight.w400,
-                    height: 1.55,
+                    height: 1.55.h,
                   ),
                 ),
               ),
@@ -1626,3 +1628,5 @@ void showWaypointsInfoDialog(BuildContext context) {
     ),
   );
 }
+
+

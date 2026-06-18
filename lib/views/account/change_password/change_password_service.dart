@@ -1,78 +1,65 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../../../core/constants/services/auth_service.dart';
+import 'package:right_routes/core/constants/services/api_client.dart';
 import '../../../core/constants/api_config/api_config.dart';
 
 class ChangePasswordService {
-  // 🔥 Base URL
-  // static const String baseUrl = 'http://10.10.7.19:8000';
-
-  // 🔥 Change Password API Call
   static Future<Map<String, dynamic>> changePassword(String newPassword) async {
     try {
-      // 🔑 AuthService থেকে Access Token নিচ্ছি
-      String? token = await AuthService.getAccessToken();
+      final url = Uri.parse(ApiConfig.fullChangePasswordUrl);
 
       print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       print('📤 API REQUEST - CHANGE PASSWORD');
       print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('🌐 URL: ${ApiConfig.fullChangePasswordUrl}');
-      print('🔐 New Password: ${newPassword.replaceAll(RegExp(r'.'), '*')}'); // Hidden
-      print('🔑 Token: ${token ?? "❌ No token found"}');
+      print('🌐 URL: $url');
       print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
-      final response = await http.post(
-        Uri.parse(ApiConfig.fullChangePasswordUrl),
-        headers: {
-          'Content-Type': 'application/json',
-          if (token != null) 'Authorization': 'Bearer $token',
-        },
-        body: jsonEncode({
-          'new_password': newPassword,
-        }),
+      final response = await ApiClient.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'new_password': newPassword}),
+        // requireAuth is true by default, so ApiClient automatically attaches the token
       );
 
       print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('📥 API RESPONSE');
+      print('📥 API RESPONSE - CHANGE PASSWORD');
       print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       print('📊 Status Code: ${response.statusCode}');
       print('📦 Response Body: ${response.body}');
       print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // ✅ Success Response
         final data = jsonDecode(response.body);
-
-        print('✅ SUCCESS: Password changed successfully!\n');
-
         return {
           'success': true,
           'message': data['message'] ?? 'Password changed successfully',
           'data': data,
         };
       } else {
-        // ❌ Error Response from Server
-        final error = jsonDecode(response.body);
-
-        print('❌ ERROR: $error\n');
-
         return {
           'success': false,
-          'message': error['message'] ?? error['new_password']?.first ?? 'Failed to change password',
+          'message': _extractError(response.body, 'Failed to change password'),
         };
       }
     } catch (e) {
-      // ❌ Network Error or Exception
-      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('❌ EXCEPTION OCCURRED');
-      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      print('Error: $e');
-      print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
+      print('❌ EXCEPTION: $e');
       return {
         'success': false,
         'message': 'Network error. Please check your connection.',
       };
+    }
+  }
+
+  static String _extractError(String body, String fallback) {
+    try {
+      final data = jsonDecode(body);
+      if (data['message'] != null) return data['message'].toString();
+      if (data['detail'] != null) return data['detail'].toString();
+      if (data['new_password'] != null && data['new_password'] is List) {
+        return data['new_password'].first.toString();
+      }
+      return fallback;
+    } catch (_) {
+      return fallback;
     }
   }
 }

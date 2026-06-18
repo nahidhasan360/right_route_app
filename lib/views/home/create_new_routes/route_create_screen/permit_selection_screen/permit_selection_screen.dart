@@ -80,7 +80,7 @@
 //                             fontFamily   : 'League Gothic',
 //                             fontWeight   : FontWeight.w400,
 //                             letterSpacing: 2.2,
-//                             height       : 1.0,
+//                             height       : 1.0.h,
 //                           ),
 //                           textAlign: TextAlign.center,
 //                         ),
@@ -153,7 +153,7 @@
 //                                     borderRadius: BorderRadius.circular(12.r),
 //                                     border: Border.all(
 //                                       color: isSelected ? AppColors.orange : const Color(0xFF2A3F6A),
-//                                       width: 1.2,
+//                                       width: 1.2.w,
 //                                     ),
 //                                   ),
 //                                   child: Row(
@@ -260,7 +260,7 @@
 //                                     fontFamily   : 'League Gothic',
 //                                     fontWeight   : FontWeight.w400,
 //                                     letterSpacing: 3.0,
-//                                     height       : 1.0,
+//                                     height       : 1.0.h,
 //                                   ),
 //                                 ),
 //                               ),
@@ -295,7 +295,7 @@
 //       decoration: BoxDecoration(
 //         color       : Colors.transparent,
 //         borderRadius: BorderRadius.circular(12.r),
-//         border      : Border.all(color: _C.cardBorder, width: 1.0),
+//         border      : Border.all(color: _C.cardBorder, width: 1.0.w),
 //       ),
 //       child: child,
 //     );

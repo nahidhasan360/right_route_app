@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:right_routes/core/routes/all_routes.dart';
 import 'package:right_routes/global_widgets/custom_navbar.dart';
 import 'package:right_routes/utils/assets_manager.dart';
@@ -31,17 +31,17 @@ class PasswordSaved extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 40),
+                SizedBox(height: 40.h),
 
                 /// LOGO
                 Center(
                   child: Container(
-                    width: 225,
-                    height: 112,
+                    width: 225.w,
+                    height: 112.h,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(ImageManager.splashScreenLogo),
@@ -50,20 +50,20 @@ class PasswordSaved extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 25),
+                SizedBox(height: 25.h),
 
                 /// LOGO
                 Center(
                   child: SizedBox(
-                    width: 62,
-                    height: 62,
+                    width: 62.w,
+                    height: 62.h,
                     child: SvgPicture.asset(
                       SvgManager.blueIcon,
                       fit: BoxFit.contain,
                     ),
                   ),
                 ),
-                SizedBox(height: 21),
+                SizedBox(height: 21.h),
 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,17 +73,16 @@ class PasswordSaved extends StatelessWidget {
                         'Your new Right Route password is saved',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 28,
+                          fontSize: 28.sp,
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1,
                         ),
                       ),
                     ),
-                    SizedBox(height: 3),
+                    SizedBox(height: 3.h),
                     Divider(color: AppColors.dividerColor, thickness: 1),
-                    SizedBox(height: 34),
-
+                    SizedBox(height: 34.h),
                     ButtonReusable(
                       onPressed: () => Get.toNamed(AppRoutes.accountScreen),
                       text: 'RETURN',
@@ -96,7 +95,6 @@ class PasswordSaved extends StatelessWidget {
           ),
         ),
       ),
-
       bottomNavigationBar: CustomNavbar(),
     );
   }

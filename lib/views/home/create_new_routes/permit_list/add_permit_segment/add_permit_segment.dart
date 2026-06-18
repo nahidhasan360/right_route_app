@@ -10,7 +10,7 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:maplibre_gl/maplibre_gl.dart';
 import 'package:right_routes/global_widgets/custom_navbar.dart';
 import 'package:right_routes/utils/assets_manager.dart';
-import 'add_permit_segment_controller.dart';
+import 'package:right_routes/controllers/route_creation/add_permit_segment_controller.dart';
 
 // ─── Color constants ──────────────────────────────────────────────────────────
 class _C {
@@ -103,7 +103,7 @@ class _AddPermitSegmentState extends State<AddPermitSegment> {
                               fontFamily: 'League Gothic',
                               fontWeight: FontWeight.w400,
                               letterSpacing: 2.2,
-                              height: 1.0,
+                              height: 1.0.h,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -137,7 +137,7 @@ class _AddPermitSegmentState extends State<AddPermitSegment> {
                                     ],
                                   ),
                                 )
-                              : const SizedBox.shrink()),
+                              : SizedBox.shrink()),
 
                           SizedBox(height: 14.h),
 
@@ -175,7 +175,7 @@ class _AddPermitSegmentState extends State<AddPermitSegment> {
                                             border: Border.all(
                                               color: _C.orange
                                                   .withValues(alpha: 0.35),
-                                              width: 1.2,
+                                              width: 1.2.w,
                                             ),
                                           ),
                                           child: Row(
@@ -350,7 +350,7 @@ class _AddPermitSegmentState extends State<AddPermitSegment> {
                                               fontFamily: 'League Gothic',
                                               fontWeight: FontWeight.w400,
                                               letterSpacing: 3.0,
-                                              height: 1.0,
+                                              height: 1.0.h,
                                             ),
                                           ),
                                   ),
@@ -404,7 +404,7 @@ class _AddPermitSegmentState extends State<AddPermitSegment> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r)),
         child: Padding(
-          padding: EdgeInsets.all(20.w),
+          padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 20.w, bottom: 20.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -434,7 +434,7 @@ class _AddPermitSegmentState extends State<AddPermitSegment> {
                       child: Container(
                         width: 80.w,
                         height: 80.h,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           color: _C.orange,
                           shape: BoxShape.circle,
                         ),
@@ -593,8 +593,8 @@ class _MapPickerDialog extends StatelessWidget {
                   ),
                   Positioned(
                     top: 10.h,
-                    left: 0,
-                    right: 0,
+                    left: 0.w,
+                    right: 0.w,
                     child: Center(
                       child: Container(
                         padding: EdgeInsets.symmetric(
@@ -604,7 +604,7 @@ class _MapPickerDialog extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20.r),
                           border: Border.all(
                               color: _C.orange.withValues(alpha: 0.5),
-                              width: 1),
+                              width: 1.w),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -629,7 +629,7 @@ class _MapPickerDialog extends StatelessWidget {
                   Obx(() => controller.isGeocodingLoading.value
                       ? const Center(
                           child: CircularProgressIndicator(color: _C.orange))
-                      : const SizedBox.shrink()),
+                      : SizedBox.shrink()),
                 ],
               ),
             ),
@@ -720,7 +720,7 @@ class _GroupBox extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: _C.cardBorder, width: 1.0),
+        border: Border.all(color: _C.cardBorder, width: 1.0.w),
       ),
       child: child,
     );
@@ -755,7 +755,7 @@ class _FieldLabel extends StatelessWidget {
               color: _C.orange.withValues(alpha: 0.18),
               borderRadius: BorderRadius.circular(4.r),
               border: Border.all(
-                  color: _C.orange.withValues(alpha: 0.4), width: 0.8),
+                  color: _C.orange.withValues(alpha: 0.4), width: 0.8.w),
             ),
             child: Text(
               badge!,
@@ -900,7 +900,7 @@ class _OrangeIconBtn extends StatelessWidget {
               right: -6.w,
               child: Container(
                 padding: EdgeInsets.all(3.w),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                     boxShadow: [

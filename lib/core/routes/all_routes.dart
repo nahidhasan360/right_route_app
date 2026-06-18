@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:right_routes/views/home/create_new_routes/homescreen.dart';
 import '../../views/account/account_delete.dart';
 import '../../views/account/are_you_sure_delete_this_account.dart';
@@ -22,14 +21,16 @@ import '../../views/authentication/subscriber_agreement/subscriber_agreement.dar
 import '../../views/authentication/terms_of_service/terms_of_service.dart';
 import '../../views/authentication/we_willbe_login/we_logged_you.dart';
 import '../../views/home/account_screen/account_screen.dart';
-import '../../views/home/create_new_routes/confirm_your_routes/confirm_controller.dart';
+import 'package:right_routes/controllers/home/home_controller.dart';
+import 'package:right_routes/controllers/route_creation/confirm_controller.dart';
 import '../../views/home/create_new_routes/confirm_your_routes/confirm_your_routes.dart';
 import '../../views/home/create_new_routes/permit_list/permit_list_screen.dart';
 import '../../views/home/create_new_routes/permit_list/view_permit.dart';
+import '../../views/home/create_new_routes/confirm_your_routes/create_route_after_confirm_route/create_route_after_confirm_route.dart';
 import '../../views/home/create_new_routes/route_create_screen/add_permit/add_permit.dart';
 import '../../views/home/create_new_routes/permit_list/add_permit_segment/add_permit_segment.dart';
 import '../../views/home/create_new_routes/permit_list/add_permit_segment/confirm_segment/confirm_your_route_for_segment.dart';
-import '../../views/home/create_new_routes/permit_list/add_permit_segment/confirm_segment/confirm_your_route_segment_controller.dart';
+import 'package:right_routes/controllers/route_creation/confirm_your_route_segment_controller.dart';
 import '../../views/home/history_screen/history_screen.dart';
 import '../../views/home/team_manager/team_manager.dart';
 import '../../views/splash_screen/splash_screen.dart';
@@ -85,7 +86,10 @@ class AppRoutes {
   static const String viewPermitScreen = "/ViewPermitScreen";
 
   static const String confirmYourRoutes = "/EditConfirmStartYourRoute";
-  static const String confirmYourRouteForSegment = "/ConfirmYourRouteForSegment";
+  static const String confirmYourRouteForSegment =
+      "/ConfirmYourRouteForSegment";
+  static const String createRouteAfterConfirmRoute =
+      "/CreateRouteAfterConfirmRoute";
 
   // =============  edit - confirm - start route section ================
 
@@ -97,67 +101,198 @@ class AppRoutes {
   static List<GetPage> routes = [
     // dialog box
     // accounts ar routes
-    GetPage(name: subscriberAgreement, page: () => SubscriberAgreement()),
-    GetPage(name: privacyPolicy, page: () => PrivacyPolicy()),
-    GetPage(name: termsModal, page: () => TermsModal()),
-    GetPage(name: splashScreen, page: () => SplashScreen()),
-    GetPage(name: getStartedScreen, page: () => GetStartedScreen()),
-    GetPage(name: enterEmailScreen, page: () => EnterEmailScreen()),
-    GetPage(name: createAccountScreen, page: () => CreateAnAccount()),
-    GetPage(name: loginAccount, page: () => LoginAccount()),
     GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: subscriberAgreement,
+        page: () => SubscriberAgreement()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: privacyPolicy,
+        page: () => PrivacyPolicy()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: termsModal,
+        page: () => TermsModal()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: splashScreen,
+        page: () => SplashScreen()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: getStartedScreen,
+        page: () => GetStartedScreen()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: enterEmailScreen,
+        page: () => EnterEmailScreen()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: createAccountScreen,
+        page: () => CreateAnAccount()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: loginAccount,
+        page: () => LoginAccount()),
+    GetPage(
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 300),
       name: otpVerificationScreen,
       page: () => OtpVerificationScreen(),
       binding: OtpVerificationBinding(),
     ),
-    GetPage(name: emailEdit, page: () => EmailEdit()),
-
-    // GetPage(
-    //   name: otpVerificationScreen,
-    //   page: () => OtpVerificationScreen(),
-    //   binding: OtpVerificationBinding(),
-    // ),
-    GetPage(name: weLoggedYou, page: () => WeLoggedYou()),
-    GetPage(name: individualTeam, page: () => IndividualTeam()),
-    GetPage(name: chooseYourPlan, page: () => ChooseYourPlan()),
-    GetPage(name: chooseATeamPlan, page: () => ChooseATeamPlan()),
-
-    // HOME ROUTES (Navbar tabs)
-    GetPage(name: homeScreen, page: () => Homescreen()),
-    GetPage(name: teamManager, page: () => TeamManager()),
-    GetPage(name: accountScreen, page: () => AccountScreen()),
-    GetPage(name: historyScreen, page: () => HistoryScreen()),
-
-    // Route creation flow
-    GetPage(name: addPermitScreen, page: () => AddPermit()),
-    GetPage(name: addPermitSegmentScreen, page: () => AddPermitSegment()),
-    GetPage(name: permitListScreen, page: () => PermitListScreen()),
-    GetPage(name: viewPermitScreen, page: () => ViewPermitScreen()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: emailEdit,
+        page: () => EmailEdit()),
 
     GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: weLoggedYou,
+        page: () => WeLoggedYou()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: individualTeam,
+        page: () => IndividualTeam()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: chooseYourPlan,
+        page: () => ChooseYourPlan()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: chooseATeamPlan,
+        page: () => ChooseATeamPlan()),
+
+    // HOME ROUTES (Navbar tabs)
+    GetPage(
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 300),
+      name: homeScreen,
+      page: () => Homescreen(),
+      binding: BindingsBuilder(() {
+        if (!Get.isRegistered<HomeController>()) {
+          Get.put<HomeController>(HomeController(), permanent: true);
+        }
+      }),
+    ),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: teamManager,
+        page: () => TeamManager()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: accountScreen,
+        page: () => AccountScreen()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: historyScreen,
+        page: () => HistoryScreen()),
+
+    // Route creation flow
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: addPermitScreen,
+        page: () => AddPermit()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: addPermitSegmentScreen,
+        page: () => AddPermitSegment()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: permitListScreen,
+        page: () => PermitListScreen()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: viewPermitScreen,
+        page: () => ViewPermitScreen()),
+
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
         name: confirmYourRoutes,
         page: () => EditConfirmStartYourRoute(),
         binding: BindingsBuilder(() => Get.lazyPut<ConfirmRouteController>(
             () => ConfirmRouteController()))),
     GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
         name: confirmYourRouteForSegment,
         page: () => const ConfirmYourRouteForSegment(),
-        binding: BindingsBuilder(() => Get.lazyPut<ConfirmYourRouteSegmentController>(
-            () => ConfirmYourRouteSegmentController()))),
+        binding: BindingsBuilder(() =>
+            Get.lazyPut<ConfirmYourRouteSegmentController>(
+                () => ConfirmYourRouteSegmentController()))),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: createRouteAfterConfirmRoute,
+        page: () => CreateRouteAfterConfirmRoute()),
 
     // =============  edit - confirm - start route section ================
     // accounts all screen route
-    GetPage(name: contactSupport, page: () => ContactSupport()),
-    GetPage(name: changeEmail, page: () => ChangeEmail()),
-    GetPage(name: emailSaved, page: () => EmailSaved()),
-    GetPage(name: changePassword, page: () => ChangePassword()),
-    GetPage(name: passwordSaved, page: () => PasswordSaved()),
     GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: contactSupport,
+        page: () => ContactSupport()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: changeEmail,
+        page: () => ChangeEmail()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: emailSaved,
+        page: () => EmailSaved()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: changePassword,
+        page: () => ChangePassword()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: passwordSaved,
+        page: () => PasswordSaved()),
+    GetPage(
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 300),
       name: areYouSureDeleteThisAccount,
       page: () => AreYouSureDeleteThisAccount(),
     ),
-    GetPage(name: accountDelete, page: () => AccountDelete()),
-    GetPage(name: enterEmailForDelete, page: () => EnterEmailForDelete()),
-    GetPage(name: help, page: () => Help()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: accountDelete,
+        page: () => AccountDelete()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: enterEmailForDelete,
+        page: () => EnterEmailForDelete()),
+    GetPage(
+        transition: Transition.fadeIn,
+        transitionDuration: const Duration(milliseconds: 300),
+        name: help,
+        page: () => Help()),
   ];
 }

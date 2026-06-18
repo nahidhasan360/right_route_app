@@ -25,7 +25,7 @@ Future<void> main() async {
   print('');
   print('═══════════════════════════════════════════════════');
   print('🚀 APP STARTING');
-  print('═══════════════════════════════════════════════════');
+  print('═════════════════════════════════════════════════+══');
   print('📊 Login Status: $isLoggedIn');
   print('🔑 Has Access Token: ${token != null}');
   print('📧 User Email: ${userEmail ?? "No email"}');
@@ -41,9 +41,9 @@ Future<void> main() async {
     initialRoute = AppRoutes.homeScreen;
   } else {
     // ❌ No valid token - Go to login
-    print('❌ No valid token - Going to login');
-    print('🔐 Navigating to: ${AppRoutes.enterEmailScreen}');
-    initialRoute = AppRoutes.homeScreen;
+    print('❌ No valid token - Going to splash/getStarted');
+    print('🔐 Navigating to: ${AppRoutes.splashScreen}');
+    initialRoute = AppRoutes.splashScreen;
   }
 
   print('═══════════════════════════════════════════════════');

@@ -1,9 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:right_routes/global_widgets/custom_navbar.dart';
 import 'package:right_routes/utils/assets_manager.dart';
 import 'package:right_routes/utils/colors.dart';
@@ -25,15 +23,16 @@ class Help extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          children: [
-            SizedBox(height: 40),
+        child: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(height: 20.h),
 
             /// LOGO
             Center(
               child: Container(
-                width: 225,
-                height: 112,
+                width: 225.w,
+                height: 112.h,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage(ImageManager.splashScreenLogo),
@@ -45,11 +44,11 @@ class Help extends StatelessWidget {
 
             Expanded(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 15.w),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      SizedBox(height: 29),
+                      SizedBox(height: 29.h),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -57,16 +56,16 @@ class Help extends StatelessWidget {
                             'Help',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 28,
+                              fontSize: 28.sp,
                               fontFamily: 'Lato',
                               fontWeight: FontWeight.w700,
-                              height: 1,
+                              height: 1.0,
                               letterSpacing: 1,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          SizedBox(height: 8.h),
                           Divider(color: AppColors.dividerColor, thickness: 1),
-                          SizedBox(height: 10),
+                          SizedBox(height: 10.h),
                           RichText(
                             text: TextSpan(
                               children: [
@@ -74,29 +73,27 @@ class Help extends StatelessWidget {
                                   text: "TEAM PLAN USERS: ",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18,
+                                    fontSize: 18.sp,
                                     fontFamily: 'Lato',
                                     fontWeight: FontWeight.w800,
                                   ),
                                 ),
-
                                 TextSpan(
                                   text:
                                       "If you cannot login using your email, it's likely the company app administrator has removed you from this app plan. If you think this is an error, please contact them for more information. If you were removed and still wish to use this app, you are welcome to subscribe to our single user plan",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18,
+                                    fontSize: 18.sp,
                                     fontFamily: 'Lato',
                                     fontWeight: FontWeight.w500,
                                     height: 1.44,
                                   ),
                                 ),
-
                                 TextSpan(
                                   text: " here.",
                                   style: TextStyle(
                                     color: AppColors.purple,
-                                    fontSize: 18,
+                                    fontSize: 18.sp,
                                     fontFamily: 'Lato',
                                     fontWeight: FontWeight.w500,
                                     decoration: TextDecoration.underline,
@@ -109,26 +106,25 @@ class Help extends StatelessWidget {
                               ],
                             ),
                           ),
-                          SizedBox(height: 124),
-
+                          SizedBox(height: 124.h),
                           Text(
                             'More content Coming...',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 20.sp,
                               fontFamily: 'Lato',
                               fontWeight: FontWeight.w400,
                               height: 1.40,
                             ),
                           ),
-                          SizedBox(height: 89),
+                          SizedBox(height: 89.h),
                           ButtonReusable(
                             onPressed: () =>
                                 Get.toNamed(AppRoutes.getStartedScreen),
                             text: 'DONE',
                             width: double.infinity,
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: 20.h),
                         ],
                       ),
                     ],
@@ -138,8 +134,8 @@ class Help extends StatelessWidget {
             ),
           ],
         ),
+        ),
       ),
-
       bottomNavigationBar: CustomNavbar(),
     );
   }

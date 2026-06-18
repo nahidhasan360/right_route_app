@@ -22,7 +22,7 @@ class CustomToggleSwitchAdvanced extends StatelessWidget {
   final bool showShadow;
 
   const CustomToggleSwitchAdvanced({
-    Key? key,
+    super.key,
     required this.value,
     this.onChanged,
     this.activeColor,
@@ -37,7 +37,7 @@ class CustomToggleSwitchAdvanced extends StatelessWidget {
     this.inactiveSvgPath,
     this.svgColor,
     this.showShadow = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class CustomToggleSwitchAdvanced extends StatelessWidget {
             borderRadius: BorderRadius.circular((height ?? 32) / 2),
             color: value.value
                 ? (activeColor ?? const Color(0xFFFF8C42))
-                : (inactiveColor ?? Colors.grey.withOpacity(0.3)),
+                : (inactiveColor ?? Colors.grey.withValues(alpha: 0.3)),
           ),
           child: Stack(
             children: [
@@ -78,7 +78,7 @@ class CustomToggleSwitchAdvanced extends StatelessWidget {
                     boxShadow: showShadow
                         ? [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),

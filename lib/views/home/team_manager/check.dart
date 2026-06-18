@@ -90,7 +90,7 @@ class UserModel {
 // MAIN SCREEN: Complete UI
 // ========================================
 class UserManagementScreen extends StatelessWidget {
-  const UserManagementScreen({Key? key}) : super(key: key);
+  const UserManagementScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

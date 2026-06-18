@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'confirm_controller.dart';
+import 'package:right_routes/controllers/route_creation/confirm_controller.dart';
 
 class EditConfirmRouteBinding extends Bindings {
   @override

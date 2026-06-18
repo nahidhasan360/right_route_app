@@ -1,10 +1,12 @@
 // file: views/common/reusable_enter_email_screen.dart  (নতুন ফোল্ডারে রাখতে পারো যাতে বোঝা যায় এটা reusable)
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:right_routes/utils/assets_manager.dart';
+import 'package:right_routes/core/routes/all_routes.dart';
+import 'package:right_routes/global_widgets/custom_buttons.dart';
 import 'package:right_routes/utils/colors.dart';
-import 'package:right_routes/views/authentication/enter_email_screen/widgets/continue_widgets.dart';
 
 class ReusableEnterEmailScreen extends StatelessWidget {
   final String title;
@@ -36,121 +38,114 @@ class ReusableEnterEmailScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: SingleChildScrollView(
-            child: SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(height: 15),
-                  Container(
-                    width: 225,
-                    height: 112,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(ImageManager.splashScreenLogo),
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 21),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w700,
+        child: SafeArea(
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 450),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 40.h),
+                    Container(
+                      width: 225.w,
+                      height: 112.h,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(ImageManager.splashScreenLogo),
+                          fit: BoxFit.contain,
                         ),
                       ),
-                      SizedBox(height: 21),
-                      Text(
-                        subtitle,
+                    ),
+                    SizedBox(height: 21.h),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25.sp,
+                            fontFamily: 'Lato',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(height: 21.h),
+                        Text(
+                          subtitle,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.sp,
+                            fontFamily: 'Lato',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 28.h),
+                    Container(
+                      width: double.infinity,
+                      height: 57.h,
+                      decoration: BoxDecoration(
+                        color: AppColors.medGray,
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: TextFormField(
+                        controller: controller.emailController,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 28),
-
-                  Container(
-                    width: double.infinity,
-                    constraints: BoxConstraints(
-                      minHeight: 50,
-                      maxHeight: 70,
-                      maxWidth: 500,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.medGray,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: TextFormField(
-                      controller: controller.emailController,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: 'Lato',
-                        fontWeight: FontWeight.w400,
-                        height: 1.4,
-                        letterSpacing: 0.2,
-                      ),
-                      cursorColor: Colors.white,
-                      cursorHeight: 22,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hintText: "Email",
-                        hintStyle: TextStyle(
-                          color: Color(0xFFBFBFBF),
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w400,
+                          height: 1.4.h,
+                          letterSpacing: 0.2,
                         ),
-                        contentPadding: EdgeInsets.only(
-                          top: 15,
-                          left: 15,
-                          right: 10,
-                          bottom: 10,
+                        cursorColor: Colors.white,
+                        cursorHeight: 22.h,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          hintText: "Email",
+                          hintStyle: TextStyle(
+                            color: Color(0xFFBFBFBF),
+                            fontSize: 16.sp,
+                            fontFamily: 'Lato',
+                            fontWeight: FontWeight.w400,
+                          ),
+                          isDense: true,
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 14.h, horizontal: 15.w),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
                         ),
-                        border: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
                       ),
                     ),
-                  ),
+                    SizedBox(height: 25.h),
+                    CustomButton(
+                      text: buttonText,
+                      width: double.infinity,
+                      height: 57.h,
+                      onPressed: () {
+                        String email = controller.emailController.text.trim();
 
-                  SizedBox(height: 25),
+                        if (email.isEmpty) {
+                          Get.snackbar("Error", "Please enter your email",
+                              backgroundColor:
+                                  Colors.red.withValues(alpha: 0.8),
+                              colorText: Colors.white);
+                          return;
+                        }
 
-
-                  ContinueWidgets(
-                    text: buttonText,
-                    width: double.infinity,
-                    onPressed: () {
-                      String email = controller.emailController.text.trim();
-
-                      if (email.isEmpty) {
-                        Get.snackbar("Error", "Please enter your email",
-                            backgroundColor: Colors.red.withValues(alpha: 0.8),
-                            colorText: Colors.white);
-                        return;
-                      }
-
-                      onEmailSubmitted?.call(email);
-                      onContinue();
-                      controller.emailController.clear();
-                    },
-                  ),
-                ],
+                        onEmailSubmitted?.call(email);
+                        onContinue();
+                        controller.emailController.clear();
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

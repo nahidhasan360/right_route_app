@@ -700,8 +700,8 @@ class _DriveRouteMapState extends State<DriveRouteMap>
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          height: 36, // Slim button
-          margin: const EdgeInsets.symmetric(horizontal: 4),
+          height: 36.h, // Slim button
+          margin: EdgeInsets.symmetric(horizontal: 4),
           decoration: BoxDecoration(
             color: const Color(0xFFF28546), // Exact orange from image
             borderRadius: BorderRadius.circular(6.r),
@@ -709,9 +709,9 @@ class _DriveRouteMapState extends State<DriveRouteMap>
           child: Center(
             child: Text(
               text,
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.white,
-                fontSize: 14,
+                fontSize: 14.sp,
                 fontFamily: 'Lato',
                 fontWeight: FontWeight.bold,
               ),

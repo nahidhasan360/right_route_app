@@ -5,7 +5,8 @@ import 'package:get/get.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../../../utils/assets_manager.dart';
 import '../../../../utils/colors.dart';
-import 'otp_verification_controller.dart';
+import 'package:right_routes/global_widgets/custom_buttons.dart';
+import 'package:right_routes/controllers/auth/otp_verification_controller.dart';
 
 /// ═══════════════════════════════════════════════════════════
 /// OtpVerificationScreenlogin - Updated with API Integration
@@ -17,7 +18,6 @@ class OtpVerificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<OtpVerificationController>();
 
-    ScreenUtil.init(context);
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -29,17 +29,17 @@ class OtpVerificationScreen extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: SingleChildScrollView(
             child: Column(
               children: [
-                const SizedBox(height: 40),
+                SizedBox(height: 40.h),
 
                 /// LOGO
                 Center(
                   child: Container(
-                    width: 225,
-                    height: 112,
+                    width: 225.w,
+                    height: 112.h,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(ImageManager.splashScreenLogo),
@@ -49,7 +49,7 @@ class OtpVerificationScreen extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 21),
+                SizedBox(height: 21.h),
 
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,14 +59,14 @@ class OtpVerificationScreen extends StatelessWidget {
                       "Check your email inbox",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 25,
+                        fontSize: 25.sp,
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.w700,
-                        height: 1.12,
+                        height: 1.12.h,
                       ),
                     ),
 
-                    SizedBox(height: 21),
+                    SizedBox(height: 21.h),
 
                     /// SUBTITLE WITH EMAIL
                     Text.rich(
@@ -74,10 +74,10 @@ class OtpVerificationScreen extends StatelessWidget {
                         children: [
                           TextSpan(
                             text:
-                            "We'll need you to verify your email address. We've sent a 6-digit code to ",
+                                "We'll need you to verify your email address. We've sent a 6-digit code to ",
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 18,
+                              fontSize: 18.sp,
                               fontFamily: 'Lato',
                               fontWeight: FontWeight.w500,
                             ),
@@ -86,28 +86,28 @@ class OtpVerificationScreen extends StatelessWidget {
                             text: controller.email,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 18,
+                              fontSize: 18.sp,
                               fontFamily: 'Lato',
                               fontWeight: FontWeight.bold,
-                              height: 1.44,
+                              height: 1.44.h,
                             ),
                           ),
                           TextSpan(
                             text:
-                            ' The code expires in 15 minutes. Please enter it below.',
+                                ' The code expires in 15 minutes. Please enter it below.',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 18,
+                              fontSize: 18.sp,
                               fontFamily: 'Lato',
                               fontWeight: FontWeight.w500,
-                              height: 1.44,
+                              height: 1.44.h,
                             ),
                           ),
                         ],
                       ),
                     ),
 
-                    SizedBox(height: 28),
+                    SizedBox(height: 28.h),
 
                     /// PIN CODE FIELD
                     PinCodeTextField(
@@ -118,11 +118,16 @@ class OtpVerificationScreen extends StatelessWidget {
                       keyboardType: TextInputType.number,
                       obscureText: false,
                       cursorColor: Colors.black,
+                      textStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
                       pinTheme: PinTheme(
                         shape: PinCodeFieldShape.box,
-                        borderRadius: BorderRadius.circular(5),
-                        fieldHeight: 50,
-                        fieldWidth: 50,
+                        borderRadius: BorderRadius.circular(5.r),
+                        fieldHeight: 57.h,
+                        fieldWidth: 57.w,
                         inactiveColor: Colors.transparent,
                         selectedColor: AppColors.orange,
                         activeColor: Colors.white,
@@ -138,122 +143,82 @@ class OtpVerificationScreen extends StatelessWidget {
                       },
                     ),
 
-                    SizedBox(height: 18),
+                    SizedBox(height: 18.h),
 
-                    /// CONTINUE BUTTON - ✅ NOW CALLS VERIFY API
+                    /// CONTINUE BUTTON
                     Obx(
-                          () => GestureDetector(
-                        onTap: controller.isLoading.value
+                      () => CustomButton(
+                        text: controller.isVerifying.value
+                            ? 'LOADING...'
+                            : 'CONTINUE',
+                        onPressed: controller.isVerifying.value
                             ? null
                             : () {
-                          // ✅ Call verify OTP API
-                          controller.verifyOtp();
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          height: 55,
-                          decoration: BoxDecoration(
-                            color: controller.isLoading.value
-                                ? AppColors.orange.withOpacity(0.5)
-                                : AppColors.orange,
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                          alignment: Alignment.center,
-                          child: controller.isLoading.value
-                              ? CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2.5,
-                          )
-                              : Text(
-                            'CONTINUE',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontFamily: 'League Gothic',
-                              fontWeight: FontWeight.w400,
-                              height: 1.17,
-                              letterSpacing: 2,
-                            ),
-                          ),
-                        ),
+                                // ✅ Call verify OTP API
+                                controller.verifyOtp();
+                              },
+                        isLoading: controller.isVerifying.value,
+                        showSpinner: false,
+                        height: 58.h,
                       ),
                     ),
 
-                    SizedBox(height: 29),
+                    SizedBox(height: 29.h),
 
                     /// CANCEL BUTTON
-                    GestureDetector(
-                      onTap: () {
+                    CustomButton(
+                      text: 'CANCEL',
+                      backgroundColor: AppColors.medGray,
+                      onPressed: () {
                         Get.back();
                       },
-                      child: Container(
-                        width: double.infinity,
-                        height: 55,
-                        decoration: BoxDecoration(
-                          color: AppColors.medGray,
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          'CANCEL',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontFamily: 'League Gothic',
-                            fontWeight: FontWeight.w400,
-                            height: 1.17,
-                            letterSpacing: 2,
-                          ),
-                        ),
-                      ),
+                      height: 55.h,
                     ),
 
-                    SizedBox(height: 53),
+                    SizedBox(height: 53.h),
 
                     /// RESEND OTP
                     Obx(
-                          () => RichText(
+                      () => RichText(
                         text: TextSpan(
                           children: [
                             TextSpan(
                               text:
-                              "Didn't receive the mail? Check your spam folder or ",
+                                  "Didn't receive the mail? Check your spam folder or ",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 15,
+                                fontSize: 15.sp,
                                 fontFamily: 'Lato',
                                 fontWeight: FontWeight.w500,
-                                height: 1.38,
+                                height: 1.38.h,
                               ),
                             ),
                             TextSpan(
-                              text: controller.isLoading.value
+                              text: controller.isResending.value
                                   ? "Sending..."
                                   : "Resend",
                               style: TextStyle(
-                                color: controller.isLoading.value
+                                color: controller.isResending.value
                                     ? AppColors.purple.withOpacity(0.5)
                                     : AppColors.purple,
-                                fontSize: 16,
+                                fontSize: 16.sp,
                                 fontFamily: 'Lato',
                                 fontWeight: FontWeight.w500,
-                                height: 1.38,
+                                height: 1.38.h,
                               ),
                               recognizer: TapGestureRecognizer()
-                                ..onTap = controller.isLoading.value
+                                ..onTap = controller.isResending.value
                                     ? null
                                     : () {
-                                  controller.resendOtp();
-                                },
+                                        controller.resendOtp();
+                                      },
                             ),
                           ],
                         ),
                       ),
                     ),
 
-                    SizedBox(height: 40),
+                    SizedBox(height: 40.h),
                   ],
                 ),
               ],

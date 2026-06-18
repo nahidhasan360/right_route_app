@@ -8,10 +8,20 @@ import 'package:right_routes/global_widgets/custom_navbar.dart';
 import 'package:right_routes/utils/assets_manager.dart';
 import 'package:right_routes/utils/colors.dart';
 
-// ✅ CSV Import Dependencies
 import 'package:file_picker/file_picker.dart';
 import 'package:csv/csv.dart';
 import 'dart:io';
+
+// ============================================================
+// SCREENUTIL RULES (Design: 440x956)
+// ============================================================
+// .w   → horizontal dimension (width, horizontal padding/margin)
+// .h   → vertical dimension (height, vertical padding/margin)
+// .sp  → font size ONLY
+// .r   → border radius ONLY
+// ❌ NEVER use .h on lineHeight/height inside TextStyle — it's a multiplier
+// ❌ NEVER use raw numbers for spacing — always .w or .h
+// ============================================================
 
 // ============================================================
 // COLOR CONSTANTS
@@ -25,7 +35,7 @@ class TeamManagerColors {
 }
 
 // ============================================================
-// CONTROLLER - GetX State Management
+// CONTROLLER
 // ============================================================
 class TeamManagerController extends GetxController {
   final searchController = TextEditingController();
@@ -35,11 +45,12 @@ class TeamManagerController extends GetxController {
   var userList = <UserModel>[].obs;
   var filteredUserList = <UserModel>[].obs;
   var isAllSelected = false.obs;
+  var enrolledFilter = 'All'.obs;
+  UserModel? editingUser;
 
   final userListScrollController = ScrollController();
   final emailInputScrollController = ScrollController();
 
-  // ✅ User Limit Variables
   RxInt userLimit = 215.obs;
   RxInt currentUsers = 0.obs;
   RxInt remainingSlots = 215.obs;
@@ -70,70 +81,84 @@ class TeamManagerController extends GetxController {
   void loadSampleUsers() {
     userList.value = [
       UserModel(
-        name: 'John Doe',
-        email: 'john@truck.com...',
-        status: UserStatus.active,
-        isSelected: false,
-      ),
+          name: 'John Doe',
+          email: 'john@truck.com...',
+          status: UserStatus.active,
+          isSelected: false,
+          isEnrolled: true),
       UserModel(
-        name: 'Mark Smith',
-        email: 'marksmith@truc...',
-        status: UserStatus.pending,
-        isSelected: false,
-      ),
+          name: 'Mark Smith',
+          email: 'marksmith@truc...',
+          status: UserStatus.pending,
+          isSelected: false,
+          isEnrolled: false),
       UserModel(
-        name: 'Sarah Johnson',
-        email: 'sarah@truc...',
-        status: UserStatus.resend,
-        isSelected: false,
-      ),
+          name: 'Sarah Johnson',
+          email: 'sarah@truc...',
+          status: UserStatus.resend,
+          isSelected: false,
+          isEnrolled: false),
       UserModel(
-        name: 'Sam Cline',
-        email: 'samcline@truc...',
-        status: UserStatus.active,
-        isSelected: false,
-      ),
+          name: 'Sam Cline',
+          email: 'samcline@truc...',
+          status: UserStatus.active,
+          isSelected: false,
+          isEnrolled: true),
       UserModel(
-        name: 'Emily Davis',
-        email: 'emily@truck.com...',
-        status: UserStatus.pending,
-        isSelected: false,
-      ),
+          name: 'Emily Davis',
+          email: 'emily@truck.com...',
+          status: UserStatus.pending,
+          isSelected: false,
+          isEnrolled: false),
       UserModel(
-        name: 'Michael Brown',
-        email: 'michael@truc...',
-        status: UserStatus.active,
-        isSelected: false,
-      ),
+          name: 'Michael Brown',
+          email: 'michael@truc...',
+          status: UserStatus.active,
+          isSelected: false,
+          isEnrolled: true),
       UserModel(
-        name: 'Jessica Wilson',
-        email: 'jessica@truc...',
-        status: UserStatus.resend,
-        isSelected: false,
-      ),
+          name: 'Jessica Wilson',
+          email: 'jessica@truc...',
+          status: UserStatus.resend,
+          isSelected: false,
+          isEnrolled: false),
       UserModel(
-        name: 'David Lee',
-        email: 'david@truck.com...',
-        status: UserStatus.active,
-        isSelected: false,
-      ),
+          name: 'David Lee',
+          email: 'david@truck.com...',
+          status: UserStatus.active,
+          isSelected: false,
+          isEnrolled: true),
     ];
-    filteredUserList.value = userList;
+    filterUsers(searchController.text);
     _updateUserCount();
   }
 
   void filterUsers(String query) {
-    if (query.isEmpty) {
-      filteredUserList.value = userList;
-    } else {
-      filteredUserList.value = userList
-          .where(
-            (user) =>
-                user.name.toLowerCase().contains(query.toLowerCase()) ||
-                user.email.toLowerCase().contains(query.toLowerCase()),
-          )
+    var tempList = userList.toList();
+
+    // Text search filter
+    if (query.isNotEmpty) {
+      tempList = tempList
+          .where((user) =>
+              user.name.toLowerCase().contains(query.toLowerCase()) ||
+              user.email.toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
+
+    // Enrolled filter
+    if (enrolledFilter.value != 'All') {
+      bool isTargetEnrolled = enrolledFilter.value == 'Yes';
+      tempList = tempList
+          .where((user) => user.isEnrolled == isTargetEnrolled)
+          .toList();
+    }
+
+    // A-Z sorting by First Name (Name)
+    tempList
+        .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+
+    filteredUserList.value = tempList;
+    _updateSelectAllState();
   }
 
   void toggleUserSelection(int index) {
@@ -159,33 +184,25 @@ class TeamManagerController extends GetxController {
   }
 
   void editUser(UserModel user) {
+    editingUser = user;
     emailInputController.text = '${user.name}, ${user.email}';
-    Get.snackbar(
-      'Edit Mode',
-      'User loaded in ADD/EDIT USERS box. Modify and click Add to update.',
-      backgroundColor: TeamManagerColors.primaryOrange,
-      colorText: Colors.white,
-    );
+    Get.snackbar('Edit Mode', 'User loaded in ADD/EDIT USERS box.',
+        backgroundColor: TeamManagerColors.primaryOrange,
+        colorText: Colors.white);
   }
 
   UserModel? parseSingleEntry(String entry) {
     try {
       final parts = entry.split(',').map((e) => e.trim()).toList();
       if (parts.length != 2) return null;
-
       final name = parts[0];
       final email = parts[1];
-
-      if (name.isEmpty || email.isEmpty || !email.contains('@')) {
-        return null;
-      }
-
+      if (name.isEmpty || email.isEmpty || !email.contains('@')) return null;
       return UserModel(
-        name: name,
-        email: email,
-        status: UserStatus.pending,
-        isSelected: false,
-      );
+          name: name,
+          email: email,
+          status: UserStatus.pending,
+          isSelected: false);
     } catch (e) {
       return null;
     }
@@ -198,27 +215,37 @@ class TeamManagerController extends GetxController {
         .where((e) => e.isNotEmpty)
         .toList();
     final users = <UserModel>[];
-
     for (final line in lines) {
       final user = parseSingleEntry(line);
-      if (user != null) {
-        users.add(user);
-      }
+      if (user != null) users.add(user);
     }
-
     return users;
   }
 
   void addUserEmail() {
     final input = emailInputController.text.trim();
-
     if (input.isEmpty) {
-      Get.snackbar(
-        'Error',
-        'Please enter user information',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      Get.snackbar('Error', 'Please enter user information',
+          backgroundColor: Colors.red, colorText: Colors.white);
+      return;
+    }
+
+    // Handle Edit Mode
+    if (editingUser != null) {
+      final singleUser = parseSingleEntry(input);
+      if (singleUser != null) {
+        editingUser!.name = singleUser.name;
+        editingUser!.email = singleUser.email;
+        filterUsers(searchController.text);
+        emailInputController.clear();
+        editingUser = null;
+        Get.snackbar('Success', 'User updated successfully',
+            backgroundColor: Colors.green, colorText: Colors.white);
+      } else {
+        Get.snackbar('Invalid Format',
+            'Use format: "Firstname Lastname, email@email.com"',
+            backgroundColor: Colors.red, colorText: Colors.white);
+      }
       return;
     }
 
@@ -229,127 +256,80 @@ class TeamManagerController extends GetxController {
     if (totalAfterAdd > userLimit.value) {
       int exceededBy = totalAfterAdd - userLimit.value;
       int availableSlots = userLimit.value - userList.length;
-
-      Get.snackbar(
-        'Limit Exceeded',
-        'You are trying to add $pendingCount users but only have $availableSlots seats available.\nYou are over the limit by $exceededBy users.\n\nPlease remove some users from the text field or upgrade your plan.',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: Duration(seconds: 6),
-      );
+      Get.snackbar('Limit Exceeded',
+          'Trying to add $pendingCount users but only $availableSlots seats available. Over by $exceededBy.',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 6));
       return;
     }
 
     final singleUser = parseSingleEntry(input);
     if (singleUser != null) {
       userList.add(singleUser);
-      filteredUserList.value = userList;
+      filterUsers(searchController.text);
       emailInputController.clear();
-
-      Get.snackbar(
-        'Success',
-        'User invitation sent to ${singleUser.email}',
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
+      Get.snackbar('Success', 'Invitation sent to ${singleUser.email}',
+          backgroundColor: Colors.green, colorText: Colors.white);
       return;
     }
 
     final multipleUsers = parseMultipleEntries(input);
     if (multipleUsers.isNotEmpty) {
       userList.addAll(multipleUsers);
-      filteredUserList.value = userList;
+      filterUsers(searchController.text);
       emailInputController.clear();
-
       Get.snackbar(
-        'Success',
-        '${multipleUsers.length} user(s) added successfully',
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-      );
+          'Success', '${multipleUsers.length} user(s) added successfully',
+          backgroundColor: Colors.green, colorText: Colors.white);
       return;
     }
 
     Get.snackbar(
-      'Invalid Format',
-      'Please use format: "Firstname Lastname, email@email.com"',
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-    );
+        'Invalid Format', 'Use format: "Firstname Lastname, email@email.com"',
+        backgroundColor: Colors.red, colorText: Colors.white);
   }
 
   void importUsers() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
+        allowedExtensions: ['csv'],
         allowMultiple: false,
       );
 
-      if (result == null || result.files.isEmpty) {
-        return;
-      }
+      if (result == null || result.files.isEmpty) return;
 
       String? filePath = result.files.single.path;
       if (filePath == null) {
-        Get.snackbar(
-          'Error',
-          'Could not access file',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-        return;
-      }
-
-      if (!filePath.toLowerCase().endsWith('.csv')) {
-        Get.snackbar(
-          'Error',
-          'Please select a CSV file',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        Get.snackbar('Error', 'Could not access file',
+            backgroundColor: Colors.red, colorText: Colors.white);
         return;
       }
 
       final file = File(filePath);
-
       String csvString;
       try {
         csvString = await file.readAsString();
       } catch (e) {
-        Get.snackbar(
-          'Error',
-          'Could not read file. Please ensure it is a valid CSV file.',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        Get.snackbar('Error', 'Could not read file.',
+            backgroundColor: Colors.red, colorText: Colors.white);
         return;
       }
 
       List<List<dynamic>> csvData;
       try {
-        csvData = const CsvToListConverter().convert(
-          csvString,
-          eol: '\n',
-          shouldParseNumbers: false,
-        );
+        csvData = const CsvToListConverter()
+            .convert(csvString, eol: '\n', shouldParseNumbers: false);
       } catch (e) {
-        Get.snackbar(
-          'Error',
-          'Invalid CSV format',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        Get.snackbar('Error', 'Invalid CSV format',
+            backgroundColor: Colors.red, colorText: Colors.white);
         return;
       }
 
       if (csvData.isEmpty) {
-        Get.snackbar(
-          'Error',
-          'CSV file is empty',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        Get.snackbar('Error', 'CSV file is empty',
+            backgroundColor: Colors.red, colorText: Colors.white);
         return;
       }
 
@@ -359,7 +339,6 @@ class TeamManagerController extends GetxController {
 
       for (var row in csvData) {
         if (row.isEmpty) continue;
-
         String name = '';
         String email = '';
 
@@ -386,188 +365,131 @@ class TeamManagerController extends GetxController {
       }
 
       if (successCount == 0) {
-        Get.snackbar(
-          'Error',
-          'No valid users found in CSV file',
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        Get.snackbar('Error', 'No valid users found in CSV',
+            backgroundColor: Colors.red, colorText: Colors.white);
         return;
       }
 
       emailInputController.text = importedText.toString().trim();
-
-      String message = '$successCount user(s) imported successfully';
-      if (skipCount > 0) {
-        message += '\n$skipCount invalid entries skipped';
-      }
-
-      Get.snackbar(
-        'Success',
-        message,
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-        duration: Duration(seconds: 3),
-      );
-
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (emailInputScrollController.hasClients) {
-          emailInputScrollController.animateTo(
-            0,
-            duration: Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
-        }
-      });
+      String message = '$successCount user(s) imported';
+      if (skipCount > 0) message += '\n$skipCount invalid entries skipped';
+      Get.snackbar('Success', message,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 3));
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to import: ${e.toString()}',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      Get.snackbar('Error', 'Failed to import: ${e.toString()}',
+          backgroundColor: Colors.red, colorText: Colors.white);
     }
   }
 
   void _updateUserCount() {
     currentUsers.value = userList.length;
-
     final input = emailInputController.text.trim();
     int pendingUsers = 0;
-
     if (input.isNotEmpty) {
-      final lines = input
-          .split('\n')
-          .where((e) => e.trim().isNotEmpty)
-          .toList();
-      pendingUsers = lines.length;
+      pendingUsers = input.split('\n').where((e) => e.trim().isNotEmpty).length;
     }
-
     remainingSlots.value = userLimit.value - currentUsers.value - pendingUsers;
     update(['add_button']);
   }
 
   String get limitText {
     int remaining = userLimit.value - currentUsers.value;
-
     final input = emailInputController.text.trim();
     if (input.isNotEmpty) {
-      final lines = input
-          .split('\n')
-          .where((e) => e.trim().isNotEmpty)
-          .toList();
-      remaining -= lines.length;
+      remaining -= input.split('\n').where((e) => e.trim().isNotEmpty).length;
     }
-
-    if (remaining >= 0) {
-      return '+ $remaining';
-    } else {
-      return '$remaining';
-    }
+    return remaining >= 0 ? '+ $remaining' : '$remaining';
   }
 
   Color get limitColor {
     int remaining = userLimit.value - currentUsers.value;
-
     final input = emailInputController.text.trim();
     if (input.isNotEmpty) {
-      final lines = input
-          .split('\n')
-          .where((e) => e.trim().isNotEmpty)
-          .toList();
-      remaining -= lines.length;
+      remaining -= input.split('\n').where((e) => e.trim().isNotEmpty).length;
     }
-
-    return remaining >= 0 ? Colors.green : Colors.red;
+    return remaining >= 0 ? const Color(0xFF12A900) : const Color(0xFFA20000);
   }
 
-// ✅ This is already correct - no change needed
   bool canAddUsers() {
     final input = emailInputController.text.trim();
-
-    // Empty hole Orange button
     if (input.isEmpty) return true;
-
     final lines = input.split('\n').where((e) => e.trim().isNotEmpty).toList();
-    int pendingCount = lines.length;
-    int totalAfterAdd = userList.length + pendingCount;
-
-    // Limit cross na korle Orange, korle Grey
-    return totalAfterAdd <= userLimit.value;
-  }
-  Color addButtonColor() {
-    return canAddUsers() ? AppColors.orange : Colors.grey;
+    return userList.length + lines.length <= userLimit.value;
   }
 
-  void downloadSelected() {
-    if (userList.isEmpty) {
-      Get.snackbar(
-        'Warning',
-        'No users available to download',
-        backgroundColor: TeamManagerColors.primaryOrange,
-        colorText: Colors.white,
-      );
+  Color addButtonColor() =>
+      canAddUsers() ? AppColors.orange : const Color(0xFF8F8F8F);
+
+  void cancelInput() {
+    emailInputController.clear();
+    editingUser = null;
+    _updateUserCount();
+  }
+
+  void downloadSelected() async {
+    if (filteredUserList.isEmpty) {
+      Get.snackbar('Warning', 'No users available to download',
+          backgroundColor: TeamManagerColors.primaryOrange,
+          colorText: Colors.white);
       return;
     }
 
-    String csvContent = 'Name,Email,Status\n';
-    for (var user in userList) {
-      csvContent +=
-          '${user.name},${user.email},${_getStatusText(user.status)}\n';
-    }
+    try {
+      List<List<dynamic>> csvData = [
+        ['Name', 'Email', 'Enrolled']
+      ];
 
-    Get.snackbar(
-      'Success',
-      'Your user list in .CSV format has been emailed to the email on this account.',
-      backgroundColor: Colors.green,
-      colorText: Colors.white,
-      duration: Duration(seconds: 4),
-    );
+      for (var user in filteredUserList) {
+        csvData.add([user.name, user.email, user.isEnrolled ? 'Yes' : 'No']);
+      }
+
+      String csvString = const ListToCsvConverter().convert(csvData);
+
+      // Print the CSV to the console so you can verify it on the frontend!
+      debugPrint('--- GENERATED CSV FOR EMAIL ---');
+      debugPrint(csvString);
+      debugPrint('-------------------------------');
+
+      // Instead of saving to file, we simulate sending the email as per UI requirements
+      CustomDialogs.showDownloadSuccess();
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to generate CSV: $e',
+          backgroundColor: Colors.red, colorText: Colors.white);
+    }
   }
 
   void cancelSelected() {
-    for (var user in filteredUserList) {
+    searchController.clear();
+    enrolledFilter.value = 'All';
+    emailInputController.clear();
+    editingUser = null;
+
+    for (var user in userList) {
       user.isSelected = false;
     }
     isAllSelected.value = false;
-    filteredUserList.refresh();
-    emailInputController.clear();
 
-    Get.snackbar(
-      'Cancelled',
-      'All selections cleared and text field cleared',
-      backgroundColor: TeamManagerColors.primaryOrange,
-      colorText: Colors.white,
-    );
+    filterUsers('');
   }
 
   void resendSelected() {
-    final selected = filteredUserList.where((user) => user.isSelected).toList();
-
+    final selected = filteredUserList.where((u) => u.isSelected).toList();
     if (selected.isEmpty) {
-      Get.snackbar(
-        'Warning',
-        'Please select at least one user',
-        backgroundColor: TeamManagerColors.primaryOrange,
-        colorText: Colors.white,
-      );
+      Get.snackbar('Warning', 'Please select at least one user',
+          backgroundColor: TeamManagerColors.primaryOrange,
+          colorText: Colors.white);
       return;
     }
-
-    final resendUsers = selected
-        .where((user) => user.status == UserStatus.resend)
-        .toList();
-
+    final resendUsers =
+        selected.where((u) => u.status == UserStatus.resend).toList();
     if (resendUsers.isEmpty) {
-      Get.snackbar(
-        'Warning',
-        'Selected users do not have "Resend" status',
-        backgroundColor: TeamManagerColors.primaryOrange,
-        colorText: Colors.white,
-      );
+      Get.snackbar('Warning', 'Selected users do not have "Resend" status',
+          backgroundColor: TeamManagerColors.primaryOrange,
+          colorText: Colors.white);
       return;
     }
-
     for (var user in resendUsers) {
       CustomDialogs.showResendConfirmation(
         userName: user.name,
@@ -579,41 +501,26 @@ class TeamManagerController extends GetxController {
         },
       );
     }
-
     filteredUserList.refresh();
     _updateSelectAllState();
   }
 
   void removeSelected() {
-    final selected = filteredUserList.where((user) => user.isSelected).toList();
-
+    final selected = filteredUserList.where((u) => u.isSelected).toList();
     if (selected.isEmpty) {
-      Get.snackbar(
-        'Warning',
-        'Please select at least one user to remove',
-        backgroundColor: TeamManagerColors.primaryOrange,
-        colorText: Colors.white,
-      );
+      Get.snackbar('Warning', 'Please select at least one user to remove',
+          backgroundColor: TeamManagerColors.primaryOrange,
+          colorText: Colors.white);
       return;
     }
-
-    CustomDialogs.showRemoveConfirmation(
-      onConfirm: () {
-        filteredUserList.removeWhere((user) => user.isSelected);
-        userList.removeWhere((user) => user.isSelected);
-
-        Get.back();
-        Get.snackbar(
-          'Success',
-          '${selected.length} user(s) removed successfully',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-      },
-    );
+    CustomDialogs.showRemoveConfirmation(onConfirm: () {
+      filteredUserList.removeWhere((u) => u.isSelected);
+      userList.removeWhere((u) => u.isSelected);
+      Get.back();
+    });
   }
 
-  String _getStatusText(UserStatus status) {
+  String getStatusText(UserStatus status) {
     switch (status) {
       case UserStatus.active:
         return 'Active';
@@ -637,31 +544,39 @@ class TeamManagerController extends GetxController {
   }
 }
 
+// ============================================================
+// MODELS & ENUMS
+// ============================================================
 class UserModel {
   String name;
   String email;
   UserStatus status;
   bool isSelected;
+  bool isEnrolled;
 
   UserModel({
     required this.name,
     required this.email,
     required this.status,
     this.isSelected = false,
+    this.isEnrolled = false,
   });
 }
 
 enum UserStatus { active, pending, resend, remove }
 
+// ============================================================
+// CUSTOM SCROLL INDICATOR
+// ============================================================
 class CustomScrollIndicator extends StatefulWidget {
   final ScrollController scrollController;
   final double containerHeight;
 
   const CustomScrollIndicator({
-    Key? key,
+    super.key,
     required this.scrollController,
     required this.containerHeight,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomScrollIndicator> createState() => _CustomScrollIndicatorState();
@@ -692,87 +607,67 @@ class _CustomScrollIndicatorState extends State<CustomScrollIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    if (!widget.scrollController.hasClients) {
-      return SizedBox.shrink();
-    }
+    if (!widget.scrollController.hasClients) return const SizedBox.shrink();
 
     try {
       final position = widget.scrollController.position;
       final maxScroll = position.maxScrollExtent;
-
-      if (maxScroll <= 0) {
-        return SizedBox.shrink();
-      }
+      if (maxScroll <= 0) return const SizedBox.shrink();
 
       final viewportHeight = position.viewportDimension;
       final contentHeight = maxScroll + viewportHeight;
-
       if (contentHeight <= 0 || widget.containerHeight <= 0) {
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
       }
 
       final indicatorHeight =
           (viewportHeight / contentHeight) * widget.containerHeight;
       final maxIndicatorTravel = widget.containerHeight - indicatorHeight;
-
-      if (maxScroll <= 0) {
-        return SizedBox.shrink();
-      }
-
       final indicatorTop = (_scrollPosition / maxScroll) * maxIndicatorTravel;
 
       return Positioned(
-        right: 5,
-        top: indicatorTop.clamp(5, maxIndicatorTravel),
+        right: 5.w,
+        top: indicatorTop.clamp(5.0, maxIndicatorTravel),
         child: GestureDetector(
           onVerticalDragUpdate: (details) {
             try {
               final dragRatio = details.delta.dy / widget.containerHeight;
-              final scrollDelta = dragRatio * maxScroll;
-              final newScroll = (_scrollPosition + scrollDelta).clamp(
-                0.0,
-                maxScroll,
-              );
+              final newScroll = (_scrollPosition + dragRatio * maxScroll)
+                  .clamp(0.0, maxScroll);
               widget.scrollController.jumpTo(newScroll);
-            } catch (e) {}
-          },
-          onTapDown: (details) {
-            try {
-              final tapPosition = details.localPosition.dy;
-              final scrollRatio = tapPosition / widget.containerHeight;
-              final newScroll = (scrollRatio * maxScroll).clamp(0.0, maxScroll);
-              widget.scrollController.animateTo(
-                newScroll,
-                duration: Duration(milliseconds: 300),
-                curve: Curves.easeOut,
-              );
-            } catch (e) {}
+            } catch (_) {}
           },
           child: Container(
-            width: 9,
+            // ✅ .w for width, .h for height — correct
+            width: 9.w,
             height: indicatorHeight.clamp(5.h, widget.containerHeight),
             decoration: BoxDecoration(
               color: TeamManagerColors.primaryOrange,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10.r),
             ),
           ),
         ),
       );
-    } catch (e) {
-      return SizedBox.shrink();
+    } catch (_) {
+      return const SizedBox.shrink();
     }
   }
 }
 
+// ============================================================
+// DIALOGS
+// ============================================================
 class CustomDialogs {
   static void showRemoveConfirmation({required VoidCallback onConfirm}) {
     Get.dialog(
       Dialog(
         backgroundColor: Colors.transparent,
-        insetPadding: EdgeInsets.symmetric(horizontal: 15),
+        // ✅ .w for horizontal inset
+        insetPadding: EdgeInsets.symmetric(horizontal: 15.w),
         child: Container(
-          decoration: BoxDecoration(color: const Color(0xFFB71C1C)),
-          padding: EdgeInsets.all(15),
+          decoration: const BoxDecoration(color: Color(0xFFB71C1C)),
+          // ✅ .w for all-side padding (visual consistency)
+          padding: EdgeInsets.all(15.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -781,25 +676,27 @@ class CustomDialogs {
                 children: [
                   SvgPicture.asset(
                     "assets/icons/bell-icon.svg",
-                    height: 20,
-                    width: 20,
+                    height: 20.h,
+                    width: 20.w,
                   ),
                   GestureDetector(
                     onTap: onConfirm,
                     child: Container(
-                      width: 79,
-                      height: 23,
+                      width: 79.w,
+                      height: 30.h,
                       decoration: BoxDecoration(
                         color: AppColors.darkGray,
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(5.r),
                       ),
                       child: Center(
                         child: Text(
                           'Confirm',
                           style: GoogleFonts.lato(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w700,
+                            // ✅ lineHeight — NO .h, pure multiplier
+                            height: 1.5,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -808,24 +705,19 @@ class CustomDialogs {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'You are about to remove the selected User(s). Tap confirm to continue.',
-                    textAlign: TextAlign.start,
-                    style: GoogleFonts.lato(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      height: 1.5,
-                    ),
-                  ),
-                ],
+              SizedBox(height: 10.h),
+              Text(
+                'You are about to remove the selected User(s). Tap Confirm to continue.',
+                textAlign: TextAlign.start,
+                style: GoogleFonts.lato(
+                  color: Colors.white,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                  // ✅ NO .h on lineHeight
+                  height: 1.5,
+                ),
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 24.h),
             ],
           ),
         ),
@@ -833,7 +725,57 @@ class CustomDialogs {
       barrierDismissible: true,
     );
   }
-  //                 ============================    resend diolog box show ============================
+
+  static void showDownloadSuccess() {
+    Get.dialog(
+      Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.symmetric(horizontal: 15.w),
+        child: Container(
+          decoration: const BoxDecoration(color: Color(0xFFB71C1C)),
+          padding: EdgeInsets.all(15.w),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SvgPicture.asset(
+                    "assets/icons/bell-icon.svg",
+                    height: 20.h,
+                    width: 20.w,
+                  ),
+                  GestureDetector(
+                    onTap: () => Get.back(),
+                    child: SvgPicture.asset(
+                      "assets/icons/Close-X-Circle.svg",
+                      height: 20.h,
+                      width: 20.w,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.h),
+              Text(
+                'Your Users list has been emailed to you at the email associated with this account. It is in .CSV format.',
+                textAlign: TextAlign.start,
+                style: GoogleFonts.lato(
+                  color: Colors.white,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                  height: 1.5,
+                ),
+              ),
+              SizedBox(height: 24.h),
+            ],
+          ),
+        ),
+      ),
+      barrierDismissible: true,
+    );
+  }
+
   static void showResendConfirmation({
     required String userName,
     required String userEmail,
@@ -842,90 +784,93 @@ class CustomDialogs {
     Get.dialog(
       Dialog(
         backgroundColor: Colors.transparent,
-        insetPadding: EdgeInsets.symmetric(horizontal: 20),
+        insetPadding: EdgeInsets.symmetric(horizontal: 15.w),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.green.shade700,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
           ),
-          padding: EdgeInsets.all(20),
+          padding:
+              EdgeInsets.only(left: 15.w, right: 15.w, top: 20.w, bottom: 20.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.check_circle_outline, color: Colors.white, size: 60),
-              SizedBox(height: 20),
+              Icon(Icons.check_circle_outline,
+                  color: Colors.white, size: 60.sp),
+              SizedBox(height: 20.h),
               Text(
                 'Email Sent!',
                 style: GoogleFonts.lato(
                   color: Colors.white,
-                  fontSize: 22,
+                  fontSize: 22.sp,
                   fontWeight: FontWeight.w700,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 15.h),
               Text(
                 'An email invite has been sent to',
                 style: GoogleFonts.lato(
                   color: Colors.white,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w400,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 8),
+              SizedBox(height: 8.h),
               Text(
                 userName,
                 style: GoogleFonts.lato(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.w700,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 4),
+              SizedBox(height: 4.h),
               Text(
                 userEmail,
                 style: GoogleFonts.lato(
-                  color: Colors.white.withOpacity(0.9),
-                  fontSize: 14,
+                  color: Colors.white.withValues(alpha: 0.9),
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 15.h),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Text(
                   'They will have 7 days to respond.\nStatus will change to "Pending".',
                   style: GoogleFonts.lato(
                     color: Colors.white,
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.w500,
+                    // ✅ NO .h
                     height: 1.5,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 25),
+              SizedBox(height: 25.h),
               GestureDetector(
                 onTap: onConfirm,
                 child: Container(
                   width: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: 12),
+                  padding: EdgeInsets.symmetric(vertical: 12.h),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Text(
                     'OK',
                     style: GoogleFonts.lato(
                       color: Colors.green.shade700,
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.w700,
                     ),
                     textAlign: TextAlign.center,
@@ -944,59 +889,55 @@ class CustomDialogs {
     Get.dialog(
       Dialog(
         backgroundColor: Colors.transparent,
-        insetPadding: EdgeInsets.symmetric(horizontal: 1),
+        insetPadding: EdgeInsets.symmetric(horizontal: 15.w),
         child: Container(
           decoration: BoxDecoration(
             color: AppColors.medGray,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
           ),
-          padding: EdgeInsets.all(18),
+          padding: EdgeInsets.all(18.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  SvgPicture.asset(
-                    "assets/icons/dulogbox_person.svg",
-                    width: 30,
-                    height: 30,
-                  ),
-                  Spacer(),
+                  SvgPicture.asset("assets/icons/dulogbox_person.svg",
+                      width: 30.w, height: 30.h),
+                  const Spacer(),
                   GestureDetector(
                     onTap: () => Get.back(),
-                    child: SvgPicture.asset(
-                      "assets/icons/Close-X-Circle.svg",
-                      width: 30,
-                      height: 30,
-                    ),
+                    child: SvgPicture.asset("assets/icons/Close-X-Circle.svg",
+                        width: 30.w, height: 30.h),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 16.h),
               _buildInstructionText(
                 title: 'Single entry:',
                 content:
-                    'Tap inside field below, type first/last name and email separated by a comma. ',
+                    'Tap inside field below, type first/last name and email separated by a comma.',
               ),
               _buildInstructionText(
                 title: 'Example:',
-                content: '[sample format: Firstname Lastname, email@email.com]',
+                content: 'John Doe, email@email.com',
                 isExample: true,
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 12.h),
               _buildInstructionText(
                 title: 'Multiple entries:',
                 content:
                     'Tap Import. List must be comma delineated in .CSV format, one user per line.',
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 12.h),
               Text(
-                'After import, tap on name or email to edit. Clicking on Add moves the list to the Users list and automatically sends invite emails.',
+                'After import, tap on name or email to edit. Clicking on Add moves the list to the Users list above.',
                 style: GoogleFonts.lato(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w500,
+                  // ✅ NO .h
+                  height: 1.5,
                 ),
               ),
             ],
@@ -1012,31 +953,37 @@ class CustomDialogs {
     required String content,
     bool isExample = false,
   }) {
-    return RichText(
-      text: TextSpan(
-        style: GoogleFonts.lato(
-          color: Colors.white,
-          fontSize: 18,
-          fontWeight: FontWeight.w400,
-        ),
-        children: [
-          TextSpan(
-            text: title,
-            style: GoogleFonts.lato(fontWeight: FontWeight.w700),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 8.h),
+      child: RichText(
+        text: TextSpan(
+          style: GoogleFonts.lato(
+            color: Colors.white,
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w400,
+            // ✅ NO .h on lineHeight
+            height: 1.5,
           ),
-          TextSpan(text: ' '),
-          TextSpan(
-            text: content,
-            style: GoogleFonts.lato(
-              fontStyle: isExample ? FontStyle.italic : FontStyle.normal,
+          children: [
+            TextSpan(
+                text: title,
+                style: GoogleFonts.lato(fontWeight: FontWeight.w700)),
+            const TextSpan(text: ' '),
+            TextSpan(
+              text: content,
+              style: GoogleFonts.lato(
+                  fontStyle: isExample ? FontStyle.italic : FontStyle.normal),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
+// ============================================================
+// MAIN SCREEN
+// ============================================================
 class TeamManager extends StatelessWidget {
   TeamManager({super.key});
 
@@ -1062,7 +1009,8 @@ class TeamManager extends StatelessWidget {
               SliverAppBar(
                 pinned: true,
                 elevation: 0,
-                toolbarHeight: 144,
+                // Updated to match 20.h top margin across all screens ((152 - 112) / 2 = 20)
+                toolbarHeight: 152.h,
                 flexibleSpace: Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
@@ -1072,8 +1020,8 @@ class TeamManager extends StatelessWidget {
                   ),
                   child: Center(
                     child: Container(
-                      width: 225,
-                      height: 112,
+                      width: 225.w,
+                      height: 112.h,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(ImageManager.splashScreenLogo),
@@ -1085,7 +1033,8 @@ class TeamManager extends StatelessWidget {
                 ),
               ),
               SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+                // ✅ .w for horizontal padding
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate([
                     Column(
@@ -1095,24 +1044,24 @@ class TeamManager extends StatelessWidget {
                           'Team Manager',
                           style: GoogleFonts.lato(
                             color: Colors.white,
-                            fontSize: 32,
+                            fontSize: 28.sp,
                             fontWeight: FontWeight.w700,
                             letterSpacing: 1,
+                            // ✅ NO .h — lineHeight is a multiplier
                             height: 0.88,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        SizedBox(height: 8.h),
                         Divider(color: AppColors.dividerColor, thickness: 1),
-                        SizedBox(height: 3),
+                        SizedBox(height: 3.h),
                         _buildSubscriptionInfo(),
-                        SizedBox(height: 20),
+                        SizedBox(height: 20.h),
                         Divider(color: AppColors.dividerColor, thickness: 1),
-                        SizedBox(height: 20),
+                        SizedBox(height: 20.h),
                         _buildUsersSection(),
                         GestureDetector(
                           onTap: () {
                             final navController = Get.find<NavController>();
-                            // navController.saveCurrentNavbarRoute();
                             Get.offAllNamed(AppRoutes.accountScreen);
                           },
                           child: Text(
@@ -1120,14 +1069,15 @@ class TeamManager extends StatelessWidget {
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               color: const Color(0xFF9DACF5),
-                              fontSize: 18,
+                              fontSize: 18.sp,
                               fontFamily: 'Lato',
                               fontWeight: FontWeight.w500,
+                              // ✅ NO .h
                               height: 1.78,
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 20.h),
                       ],
                     ),
                   ]),
@@ -1146,29 +1096,30 @@ class TeamManager extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'MY CURRENT PLAN',
+          'CURRENT PLAN',
           style: GoogleFonts.leagueGothic(
             color: AppColors.orange,
-            fontSize: 24,
+            fontSize: 26.sp,
             fontWeight: FontWeight.w400,
+            // ✅ NO .h
             height: 1.56,
+            letterSpacing: 1.50,
           ),
         ),
-        SizedBox(height: 8),
-        _buildInfoText('Team [sample data: 1,000 (up to 1,000 users)]'),
-        _buildInfoText('Seats used: [sample data: 785 of 1,000]'),
-        _buildInfoText('Renewal Date: [sample data: Nov 29, 2025]'),
-        _buildInfoText('Subscription ID: [subscription ID here]'),
+        SizedBox(height: 8.h),
+        _buildInfoText('Up to 100 users'),
+        _buildInfoText('Enrolled user total: 0 of 100'),
+        _buildInfoText('Renewal date: [Month/Day/Year]'),
+        _buildInfoText('Subscription ID: sub.100 monthly'),
         GestureDetector(
-          onTap: () {
-            Get.toNamed(AppRoutes.chooseATeamPlan);
-          },
+          onTap: () => Get.toNamed(AppRoutes.chooseATeamPlan),
           child: Text(
             'Upgrade / Downgrade',
             style: GoogleFonts.lato(
               color: AppColors.purple,
-              fontSize: 16,
+              fontSize: 18.sp,
               fontWeight: FontWeight.w400,
+              // ✅ NO .h
               height: 1.56,
             ),
           ),
@@ -1179,13 +1130,15 @@ class TeamManager extends StatelessWidget {
 
   Widget _buildInfoText(String text) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 8),
+      // ✅ .h for vertical padding only
+      padding: EdgeInsets.only(bottom: 8.h),
       child: Text(
         text,
         style: GoogleFonts.lato(
           color: Colors.white,
-          fontSize: 16,
+          fontSize: 18.sp,
           fontWeight: FontWeight.w400,
+          // ✅ NO .h
           height: 1.56,
         ),
       ),
@@ -1197,15 +1150,15 @@ class TeamManager extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSearchHeader(),
-        SizedBox(height: 16),
+        SizedBox(height: 16.h),
         _buildUserListTable(),
-        SizedBox(height: 16),
+        SizedBox(height: 16.h),
         _buildActionButtons(),
-        SizedBox(height: 24),
+        SizedBox(height: 24.h),
         _buildAddEditUsersSection(),
-        SizedBox(height: 25),
+        SizedBox(height: 25.h),
         Divider(color: AppColors.dividerColor, thickness: 1),
-        SizedBox(height: 10),
+        SizedBox(height: 10.h),
       ],
     );
   }
@@ -1217,76 +1170,111 @@ class TeamManager extends StatelessWidget {
           'USERS',
           style: GoogleFonts.leagueGothic(
             color: AppColors.orange,
-            fontSize: 24,
+            fontSize: 26.sp,
             fontWeight: FontWeight.w400,
+            // ✅ NO .h
             height: 1.17,
             letterSpacing: 1.50,
           ),
         ),
-        Spacer(),
-        Row(
-          children: [
-            Icon(Icons.search, color: TeamManagerColors.primaryWhite, size: 24),
-            SizedBox(width: 2),
-            Container(
-              width: 195,
-              height: 32,
-              padding: EdgeInsets.symmetric(horizontal: 12),
+        const Spacer(),
+        Obx(() => Container(
+              height: 32.h,
+              padding: EdgeInsets.only(left: 8.w, right: 1.w),
               decoration: BoxDecoration(
                 color: AppColors.medGray,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(4.r),
               ),
-              child: Material(
-                color: Colors.transparent,
-                child: TextField(
-                  controller: controller.searchController,
-                  cursorColor: AppColors.white,
-                  cursorHeight: 18,
-                  style: GoogleFonts.lato(
-                    color: Colors.white,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    height: 2.29,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: controller.enrolledFilter.value,
+                  dropdownColor: AppColors.medGray,
+                  icon: Transform.translate(
+                    offset: Offset(-6.w, 0),
+                    child: Icon(Icons.arrow_drop_down, color: Colors.white),
                   ),
-                  decoration: InputDecoration(
-                    hintStyle: GoogleFonts.lato(
+                  style: GoogleFonts.lato(color: Colors.white, fontSize: 14.sp),
+                  onChanged: (String? newValue) {
+                    if (newValue != null) {
+                      controller.enrolledFilter.value = newValue;
+                      controller.filterUsers(controller.searchController.text);
+                    }
+                  },
+                  items: <String>['All', 'Yes', 'No']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
+            )),
+        SizedBox(width: 8.w),
+        Row(
+          children: [
+            Icon(Icons.search,
+                color: TeamManagerColors.primaryWhite, size: 26.sp),
+            SizedBox(width: 2.w),
+            Container(
+              width: 195.w,
+              height: 32.h,
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              decoration: BoxDecoration(
+                color: AppColors.medGray,
+                borderRadius: BorderRadius.circular(4.r),
+              ),
+              child: Center(
+                child: Material(
+                  color: Colors.transparent,
+                  child: TextField(
+                    controller: controller.searchController,
+                    cursorColor: AppColors.white,
+                    cursorHeight: 18,
+                    style: GoogleFonts.lato(
                       color: Colors.white,
-                      fontSize: 14,
+                      fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
-                      height: 1.29,
                     ),
-                    border: InputBorder.none,
-                    isDense: true,
-                    contentPadding: EdgeInsets.zero,
-                    enabledBorder: InputBorder.none,
-                    focusedBorder: InputBorder.none,
-                    disabledBorder: InputBorder.none,
-                    errorBorder: InputBorder.none,
-                    focusedErrorBorder: InputBorder.none,
+                    decoration: InputDecoration(
+                      hintStyle: GoogleFonts.lato(
+                        color: Colors.white,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      border: InputBorder.none,
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                    ),
                   ),
                 ),
               ),
             ),
-            SizedBox(width: 3),
+            SizedBox(width: 3.w),
             GestureDetector(
-              onTap: () {
-                controller.filterUsers(controller.searchController.text);
-              },
+              onTap: () =>
+                  controller.filterUsers(controller.searchController.text),
               child: Container(
-                width: 33,
-                height: 32,
+                width: 33.w,
+                height: 32.h,
                 decoration: BoxDecoration(
                   color: AppColors.medGray,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: Center(
                   child: Text(
                     'GO',
                     style: GoogleFonts.lato(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
-                      height: 2,
+                      // ✅ NO .h
+                      height: 1.2,
                     ),
                   ),
                 ),
@@ -1299,17 +1287,18 @@ class TeamManager extends StatelessWidget {
   }
 
   Widget _buildUserListTable() {
+    // ✅ .h diye responsive — 440x956 design e 224.h = correct
+    final double containerHeight = 224.h;
+
     return Obx(() {
       if (controller.filteredUserList.isEmpty) {
         return _buildEmptyState();
       }
 
-      final containerHeight = 224.0;
-
       return Container(
         decoration: BoxDecoration(
           color: AppColors.darkGray,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(8.r),
         ),
         child: Column(
           children: [
@@ -1342,12 +1331,13 @@ class TeamManager extends StatelessWidget {
 
   Widget _buildTableHeader() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      // ✅ .w horizontal, .h vertical
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
         color: AppColors.darkGray,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(8),
-          topRight: Radius.circular(8),
+          topLeft: Radius.circular(8.r),
+          topRight: Radius.circular(8.r),
         ),
       ),
       child: Row(
@@ -1359,7 +1349,7 @@ class TeamManager extends StatelessWidget {
               'Name',
               style: GoogleFonts.lato(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -1370,7 +1360,7 @@ class TeamManager extends StatelessWidget {
               'Email',
               style: GoogleFonts.lato(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -1378,50 +1368,45 @@ class TeamManager extends StatelessWidget {
           Expanded(
             flex: 2,
             child: Text(
-              'Status',
+              'Enrolled',
               style: GoogleFonts.lato(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ),
           SizedBox(
-            width: 70,
+            width: 70.w,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Obx(
-                  () => GestureDetector(
-                    onTap: () {
-                      controller.toggleAllSelection();
-                    },
-                    child: Container(
-                      width: 20,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: controller.isAllSelected.value
-                            ? AppColors.orange
-                            : Colors.transparent,
-                        border: Border.all(color: Colors.white, width: 1.5),
-                        borderRadius: BorderRadius.circular(4),
+                Obx(() => GestureDetector(
+                      onTap: controller.toggleAllSelection,
+                      child: Container(
+                        width: 20.w,
+                        height: 20.h,
+                        decoration: BoxDecoration(
+                          color: controller.isAllSelected.value
+                              ? AppColors.orange
+                              : Colors.transparent,
+                          border: Border.all(color: Colors.white, width: 1.5.w),
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                        child: controller.isAllSelected.value
+                            ? Icon(Icons.check,
+                                color: Colors.white, size: 16.sp)
+                            : null,
                       ),
-                      child: controller.isAllSelected.value
-                          ? Icon(Icons.check, color: Colors.white, size: 16)
-                          : null,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 8),
+                    )),
+                SizedBox(width: 8.w),
                 GestureDetector(
-                  onTap: () {
-                    _showUserManagementHelp();
-                  },
+                  onTap: _showUserManagementHelp,
                   child: SvgPicture.asset(
                     "assets/icons/Question-Box-gray.svg",
-                    width: 24,
-                    height: 24,
+                    width: 24.w,
+                    height: 24.h,
                   ),
                 ),
               ],
@@ -1435,22 +1420,18 @@ class TeamManager extends StatelessWidget {
   Widget _buildTableRow(int index) {
     return Obx(() {
       final user = controller.filteredUserList[index];
-
-      // ✅ Name/Email: White unless checkbox checked → then Orange
       final nameEmailColor = user.isSelected
           ? TeamManagerColors.primaryOrange
           : TeamManagerColors.primaryWhite;
-
-      // ✅ Status color: Active/Resend = Orange, Pending = White
       final statusColor = _getTextColor(user.status);
 
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        // ✅ .w horizontal, .h vertical
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
         decoration: BoxDecoration(
           color: AppColors.darkGray,
-          border: Border(
-            bottom: BorderSide(color: AppColors.medGray, width: 1),
-          ),
+          border:
+              Border(bottom: BorderSide(color: AppColors.medGray, width: 1)),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -1463,7 +1444,7 @@ class TeamManager extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.lato(
                   color: nameEmailColor,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -1476,7 +1457,7 @@ class TeamManager extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.lato(
                   color: nameEmailColor,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -1484,50 +1465,46 @@ class TeamManager extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Text(
-                _getStatusText(user.status),
+                user.isEnrolled ? 'Yes' : 'No',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.lato(
-                  color: statusColor,
-                  fontSize: 14,
+                  color: user.isEnrolled ? Colors.green : Colors.red,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ),
             SizedBox(
-              width: 70,
+              width: 70.w,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      controller.toggleUserSelection(index);
-                    },
+                    onTap: () => controller.toggleUserSelection(index),
                     child: Container(
-                      width: 20,
-                      height: 20,
+                      width: 20.w,
+                      height: 20.h,
                       decoration: BoxDecoration(
                         color: user.isSelected
                             ? TeamManagerColors.primaryOrange
                             : Colors.transparent,
-                        border: Border.all(color: Colors.white, width: 1.5),
-                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: Colors.white, width: 1.5.w),
+                        borderRadius: BorderRadius.circular(4.r),
                       ),
                       child: user.isSelected
-                          ? Icon(Icons.close, color: Colors.white, size: 16)
+                          ? Icon(Icons.close, color: Colors.white, size: 16.sp)
                           : null,
                     ),
                   ),
-                  SizedBox(width: 8),
+                  SizedBox(width: 8.w),
                   GestureDetector(
-                    onTap: () {
-                      controller.editUser(user);
-                    },
+                    onTap: () => controller.editUser(user),
                     child: SvgPicture.asset(
                       "assets/icons/Edit-Pencil-white.svg",
-                      width: 24,
-                      height: 24,
+                      width: 24.w,
+                      height: 24.h,
                     ),
                   ),
                 ],
@@ -1543,58 +1520,54 @@ class TeamManager extends StatelessWidget {
     Get.dialog(
       Dialog(
         backgroundColor: Colors.transparent,
-        insetPadding: EdgeInsets.symmetric(horizontal: 1),
+        insetPadding: EdgeInsets.symmetric(horizontal: 15.w),
         child: Container(
           decoration: BoxDecoration(
             color: AppColors.medGray,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
           ),
-          padding: EdgeInsets.all(20),
+          padding:
+              EdgeInsets.only(left: 15.w, right: 15.w, top: 20.w, bottom: 20.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  SvgPicture.asset(
-                    "assets/icons/Edit-Pencil-white.svg",
-                    height: 30,
-                    width: 30,
-                  ),
+                  SvgPicture.asset("assets/icons/Edit-Pencil-white.svg",
+                      height: 30.h, width: 30.w),
                   SizedBox(width: 12.w),
                   Expanded(
                     child: Text(
                       'User Management',
                       style: GoogleFonts.lato(
                         color: Colors.white,
-                        fontSize: 17,
+                        fontSize: 17.sp,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
                   GestureDetector(
                     onTap: () => Get.back(),
-                    child: Container(
-                      padding: EdgeInsets.all(4),
-                      child: SvgPicture.asset(
-                        "assets/icons/Close-X-Circle.svg",
-                        height: 30,
-                        width: 30,
-                      ),
+                    child: Padding(
+                      padding: EdgeInsets.all(4.w),
+                      child: SvgPicture.asset("assets/icons/Close-X-Circle.svg",
+                          height: 30.h, width: 30.w),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              SizedBox(height: 16.h),
               Text(
                 '• Click the checkbox to select individual users\n'
                 '• Click the checkbox in the header to select/deselect all users\n'
                 '• Click the pencil icon to edit a user\'s information\n'
-                '• Select users and click action buttons to perform bulk operations',
+                '• Select users and click action buttons for bulk operations',
                 style: GoogleFonts.lato(
                   color: Colors.white,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.w400,
+                  // ✅ NO .h
                   height: 1.5,
                 ),
               ),
@@ -1618,7 +1591,7 @@ class TeamManager extends StatelessWidget {
           'No users found',
           style: GoogleFonts.lato(
             color: TeamManagerColors.primaryWhite.withValues(alpha: 0.6),
-            fontSize: 16,
+            fontSize: 16.sp,
           ),
         ),
       ),
@@ -1627,22 +1600,19 @@ class TeamManager extends StatelessWidget {
 
   Widget _buildActionButtons() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
-          child: _buildActionButton('Download', controller.downloadSelected),
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child: _buildActionButton('Cancel', controller.cancelSelected),
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child: _buildActionButton('Resend', controller.resendSelected),
-        ),
-        SizedBox(width: 10),
-        Expanded(
-          child: _buildActionButton('Remove', controller.removeSelected),
-        ),
+        SizedBox(
+            width: 80.w,
+            child: _buildActionButton('Download', controller.downloadSelected)),
+        SizedBox(width: 10.w),
+        SizedBox(
+            width: 80.w,
+            child: _buildActionButton('Cancel', controller.cancelSelected)),
+        SizedBox(width: 10.w),
+        SizedBox(
+            width: 80.w,
+            child: _buildActionButton('Remove', controller.removeSelected)),
       ],
     );
   }
@@ -1651,20 +1621,21 @@ class TeamManager extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+        // ✅ .w horizontal, .h vertical
+        padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 2.h),
         decoration: BoxDecoration(
           color: AppColors.orange,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(5.r),
         ),
         child: Center(
           child: Text(
             label,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
-              fontSize: 14,
+              fontSize: 15.sp,
               fontFamily: 'Lato',
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w900,
             ),
           ),
         ),
@@ -1673,37 +1644,34 @@ class TeamManager extends StatelessWidget {
   }
 
   Widget _buildAddEditUsersSection() {
-    final containerHeight = 264.9;
+    // ✅ .h diye responsive
+    final double containerHeight = 265.h;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          padding: EdgeInsets.symmetric(vertical: 12),
+          padding: EdgeInsets.symmetric(vertical: 12.h),
           child: Row(
             children: [
               Text(
-                textAlign: TextAlign.start,
                 'ADD / EDIT USERS',
                 style: GoogleFonts.leagueGothic(
                   color: AppColors.orange,
-                  fontSize: 24,
+                  fontSize: 26.sp,
                   fontWeight: FontWeight.w400,
+                  // ✅ NO .h
                   height: 1.17,
                   letterSpacing: 1.50,
                 ),
               ),
-              SizedBox(width: 3),
+              SizedBox(width: 3.w),
               GestureDetector(
-                onTap: () {
-                  CustomDialogs.showHelpDialog();
-                },
-                child: Center(
-                  child: SvgPicture.asset(
-                    "assets/icons/Question-Box-gray.svg",
-                    height: 21,
-                    width: 21,
-                  ),
+                onTap: CustomDialogs.showHelpDialog,
+                child: SvgPicture.asset(
+                  "assets/icons/Question-Box-gray.svg",
+                  height: 21.h,
+                  width: 21.w,
                 ),
               ),
             ],
@@ -1713,14 +1681,13 @@ class TeamManager extends StatelessWidget {
           children: [
             Container(
               height: containerHeight,
-              padding: EdgeInsets.all(16),
+              // ✅ .w for all-side padding
+              padding: EdgeInsets.all(16.w),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: TeamManagerColors.borderColor,
-                  width: 1,
-                ),
+                borderRadius: BorderRadius.circular(8.r),
+                border:
+                    Border.all(color: TeamManagerColors.borderColor, width: 1),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1735,12 +1702,12 @@ class TeamManager extends StatelessWidget {
                         minLines: 10,
                         style: GoogleFonts.lato(
                           color: Colors.black,
-                          fontSize: 16,
+                          fontSize: 16.sp,
                         ),
                         decoration: InputDecoration(
                           hintStyle: GoogleFonts.lato(
                             color: Colors.black.withValues(alpha: 0.4),
-                            fontSize: 16,
+                            fontSize: 16.sp,
                           ),
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.zero,
@@ -1749,16 +1716,14 @@ class TeamManager extends StatelessWidget {
                     ),
                   ),
                   Divider(color: AppColors.darkGray, thickness: 1),
-                  Obx(
-                    () => Text(
-                      controller.limitText,
-                      style: GoogleFonts.lato(
-                        color: controller.limitColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
+                  Obx(() => Text(
+                        controller.limitText,
+                        style: GoogleFonts.lato(
+                          color: controller.limitColor,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      )),
                 ],
               ),
             ),
@@ -1768,58 +1733,50 @@ class TeamManager extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 16),
+        SizedBox(height: 16.h),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(
-              width: 84,
+              width: 84.w,
               child: _buildActionButton('Import', controller.importUsers),
             ),
-            SizedBox(width: 12),
+            const Spacer(),
             SizedBox(
-              width: 84,
-              child: _buildActionButton('Cancel', controller.cancelSelected),
+              width: 84.w,
+              child: _buildActionButton('Cancel', controller.cancelInput),
             ),
-            SizedBox(width: 12),
+            SizedBox(width: 12.w),
             SizedBox(
-              width: 64,
+              width: 64.w,
               child: GetBuilder<TeamManagerController>(
                 id: 'add_button',
                 builder: (ctrl) {
-                  final canAdd = ctrl.canAddUsers();
-                  final buttonColor = ctrl.addButtonColor();
-
                   return GestureDetector(
-                    onTap: canAdd
+                    onTap: ctrl.canAddUsers()
                         ? ctrl.addUserEmail
-                        : () {
-                            Get.snackbar(
+                        : () => Get.snackbar(
                               'Cannot Add',
-                              'User limit exceeded. Please remove some users from the text field or upgrade your plan.',
+                              'User limit exceeded. Remove some users or upgrade your plan.',
                               backgroundColor: Colors.red,
                               colorText: Colors.white,
-                              duration: Duration(seconds: 4),
-                            );
-                          },
+                              duration: const Duration(seconds: 4),
+                            ),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 3,
-                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 1.w, vertical: 2.h),
                       decoration: BoxDecoration(
-                        color: buttonColor,
-                        borderRadius: BorderRadius.circular(5),
+                        color: ctrl.addButtonColor(),
+                        borderRadius: BorderRadius.circular(5.r),
                       ),
                       child: Center(
                         child: Text(
                           'Add',
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: 15.sp,
                             fontFamily: 'Lato',
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w900,
                           ),
                         ),
                       ),
@@ -1837,26 +1794,13 @@ class TeamManager extends StatelessWidget {
   Color _getTextColor(UserStatus status) {
     switch (status) {
       case UserStatus.active:
-        return TeamManagerColors.primaryOrange;  // ✅ Active = Orange
+        return TeamManagerColors.primaryOrange;
       case UserStatus.pending:
-        return TeamManagerColors.primaryWhite;   // ✅ Pending = White
+        return TeamManagerColors.primaryWhite;
       case UserStatus.resend:
-        return TeamManagerColors.primaryOrange;  // ✅ Resend = Orange
+        return TeamManagerColors.primaryOrange;
       case UserStatus.remove:
-        return TeamManagerColors.primaryWhite;   // ✅ Remove = White (though this won't be visible)
-    }
-  }
-
-  String _getStatusText(UserStatus status) {
-    switch (status) {
-      case UserStatus.active:
-        return 'Active';
-      case UserStatus.pending:
-        return 'Pending';
-      case UserStatus.resend:
-        return 'Resend';
-      case UserStatus.remove:
-        return 'Remove';
+        return TeamManagerColors.primaryWhite;
     }
   }
 }

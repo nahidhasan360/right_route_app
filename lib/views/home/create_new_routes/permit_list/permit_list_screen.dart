@@ -344,7 +344,7 @@ class PermitListController extends GetxController {
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(
               color: const Color(0xFF2A3F6A),
-              width: 1.5,
+              width: 1.5.w,
             ),
             boxShadow: [
               BoxShadow(
@@ -389,7 +389,7 @@ class PermitListController extends GetxController {
                   color: Colors.white.withValues(alpha: 0.65),
                   fontSize: 13.sp,
                   fontFamily: 'Lato',
-                  height: 1.45,
+                  height: 1.45.h,
                 ),
               ),
               SizedBox(height: 20.h),
@@ -405,7 +405,7 @@ class PermitListController extends GetxController {
                           borderRadius: BorderRadius.circular(8.r),
                           border: Border.all(
                             color: const Color(0xFF2A3F6A),
-                            width: 1,
+                            width: 1.w,
                           ),
                         ),
                         child: Center(
@@ -800,7 +800,7 @@ class _AppHeader extends StatelessWidget {
             fontFamily: 'League Gothic',
             fontWeight: FontWeight.w400,
             letterSpacing: 2.0,
-            height: 1.0,
+            height: 1.0.h,
           ),
           textAlign: TextAlign.center,
         ),
@@ -813,7 +813,7 @@ class _AppHeader extends StatelessWidget {
             fontSize: 13.sp,
             fontFamily: 'Lato',
             fontWeight: FontWeight.w400,
-            height: 1.55,
+            height: 1.55.h,
           ),
         ),
       ],
@@ -850,7 +850,7 @@ class _PermitBlock extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.r),
               border: Border.all(
                 color: const Color(0xFF2A3F6A),
-                width: 1.2,
+                width: 1.2.w,
               ),
             ),
             child: Stack(
@@ -895,7 +895,7 @@ class _PermitBlock extends StatelessWidget {
                       // ── Segment rows (Start always visible)
                       Obx(() {
                         if (permit.segments.isEmpty) {
-                          return const SizedBox.shrink();
+                          return SizedBox.shrink();
                         }
 
                         // Always show first (start)
@@ -953,7 +953,7 @@ class _PermitBlock extends StatelessWidget {
                                     segment: permit.segments[i]));
                               }
                             }
-                            return const SizedBox.shrink();
+                            return SizedBox.shrink();
                           });
 
                           // Reactive middle segments
@@ -966,7 +966,7 @@ class _PermitBlock extends StatelessWidget {
                                             _SegmentInputRow(segment: seg))
                                         .toList(),
                                   )
-                                : const SizedBox.shrink()),
+                                : SizedBox.shrink()),
                           );
                         }
 
@@ -1058,7 +1058,7 @@ class _PermitBlock extends StatelessWidget {
                         color: Colors.transparent,
                         border: Border.all(
                           color: AppColors.white,
-                          width: 1.5,
+                          width: 1.5.w,
                         ),
                         borderRadius: BorderRadius.circular(4.r),
                       ),
@@ -1070,7 +1070,7 @@ class _PermitBlock extends StatelessWidget {
                     ),
                     Container(
                       width: 16.w,
-                      height: 1,
+                      height: 1.h,
                       margin: EdgeInsets.symmetric(horizontal: 6.w),
                       color: AppColors.white.withValues(alpha: 0.40),
                     ),
@@ -1127,7 +1127,7 @@ class _SegmentInputRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.r),
         border: Border.all(
           color: const Color(0xFFDDE3EE),
-          width: 1,
+          width: 1.w,
         ),
       ),
       child: Row(

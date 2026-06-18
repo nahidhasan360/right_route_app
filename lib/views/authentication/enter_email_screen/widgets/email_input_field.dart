@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:right_routes/utils/colors.dart';
 
 class EmailInputField extends StatefulWidget {
@@ -30,23 +31,18 @@ class _EmailInputFieldState extends State<EmailInputField> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      constraints: BoxConstraints(
-        minHeight: 50,
-        maxHeight: 70,
-        maxWidth: 500,
-      ),
+      height: 57.h,
       decoration: BoxDecoration(
         color: AppColors.medGray,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(10.r),
       ),
       child: TextFormField(
         controller: widget.controller,
         style: TextStyle(
           color: Colors.white,
-          fontSize: 16,
+          fontSize: 16.sp,
           fontFamily: 'Lato',
           fontWeight: FontWeight.w400,
-          height: 1.4,
           letterSpacing: 0.2,
         ),
         cursorColor: Color(0xFFFFFFFF),
@@ -55,17 +51,13 @@ class _EmailInputFieldState extends State<EmailInputField> {
           hintText: widget.hintText,
           hintStyle: TextStyle(
             color: Color(0xFFBFBFBF),
-            fontSize: 16,
+            fontSize: 16.sp,
             fontFamily: 'Lato',
             fontWeight: FontWeight.w400,
           ),
-          isDense: false,
-          contentPadding: EdgeInsets.only(
-            top: 15,
-            left: 15,
-            right: 10,
-            bottom: 10,
-          ),
+          isDense: true,
+          contentPadding:
+              EdgeInsets.symmetric(vertical: 14.h, horizontal: 15.w),
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,

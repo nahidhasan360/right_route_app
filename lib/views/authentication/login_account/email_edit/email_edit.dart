@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:right_routes/core/routes/all_routes.dart';
 import 'package:right_routes/utils/assets_manager.dart';
 import 'package:right_routes/views/authentication/enter_email_screen/widgets/continue_widgets.dart';
 import '../../enter_email_screen/widgets/email_input_field.dart';
+import 'package:right_routes/controllers/auth/email_edit_controller.dart';
 
 class EmailEdit extends StatelessWidget {
   final controller = Get.put(EmailEditController());
@@ -21,16 +23,16 @@ class EmailEdit extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: SingleChildScrollView(
             child: SafeArea(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: 15),
+                  SizedBox(height: 15.h),
                   Container(
-                    width: 225,
-                    height: 112,
+                    width: 225.w,
+                    height: 112.h,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(ImageManager.splashScreenLogo),
@@ -38,7 +40,7 @@ class EmailEdit extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 21),
+                  SizedBox(height: 21.h),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -46,24 +48,24 @@ class EmailEdit extends StatelessWidget {
                         'Enter your email to continue',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 25,
+                          fontSize: 25.sp,
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      SizedBox(height: 21),
+                      SizedBox(height: 21.h),
                       Text(
                         "Log in to your Route Pilot account. If you don't have one, you will be prompted to create one.",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 28),
+                  SizedBox(height: 28.h),
 
                   // নতুন widget use করলাম
                   EmailInputField(
@@ -74,7 +76,7 @@ class EmailEdit extends StatelessWidget {
                     },
                   ),
 
-                  SizedBox(height: 25),
+                  SizedBox(height: 25.h),
                   ContinueWidgets(
                     text: 'CONTINUE',
                     width: double.infinity,
@@ -90,16 +92,5 @@ class EmailEdit extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class EmailEditController extends GetxController {
-  final editEmailController = TextEditingController();
-
-  @override
-  void onClose() {
-    // Controller dispose করা important
-    editEmailController.dispose();
-    super.onClose();
   }
 }

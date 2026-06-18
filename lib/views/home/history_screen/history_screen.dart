@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:right_routes/global_widgets/custom_navbar.dart';
@@ -88,10 +89,10 @@ class HistoryController extends GetxController {
     Get.dialog(
       Dialog(
         backgroundColor: Colors.transparent,
-        insetPadding: EdgeInsets.symmetric(horizontal: 15),
+        insetPadding: EdgeInsets.symmetric(horizontal: 15.w),
         child: Container(
           decoration: BoxDecoration(color: const Color(0xFFB71C1C)),
-          padding: EdgeInsets.all(15),
+          padding: EdgeInsets.all(15.w),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -113,18 +114,18 @@ class HistoryController extends GetxController {
                       );
                     },
                     child: Container(
-                      width: 79,
-                      height: 23,
+                      width: 79.w,
+                      height: 23.h,
                       decoration: BoxDecoration(
                         color: AppColors.darkGray,
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(5.r),
                       ),
                       child: Center(
                         child: Text(
                           'Confirm',
                           style: GoogleFonts.lato(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: 14.sp,
                             fontWeight: FontWeight.w700,
                           ),
                           textAlign: TextAlign.center,
@@ -134,18 +135,18 @@ class HistoryController extends GetxController {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 10.h),
               Text(
                 'Are you sure you want to delete $selectedCount Route(s)?',
                 textAlign: TextAlign.start,
                 style: GoogleFonts.lato(
                   color: Colors.white,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.w400,
-                  height: 1.5,
+                  height: 1.5.h,
                 ),
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 24.h),
             ],
           ),
         ),
@@ -173,12 +174,12 @@ class HistoryController extends GetxController {
     if (selectedRoutes.length > 1) {
       Get.dialog(
         AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
           backgroundColor: AppColors.darkGray,
           title: Row(
             children: [
               Icon(Icons.warning, color: Colors.white),
-              SizedBox(width: 8),
+              SizedBox(width: 8.w),
               Text('Error', style: TextStyle(color: Colors.white)),
             ],
           ),
@@ -298,9 +299,9 @@ class HistoryController extends GetxController {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('ID: ${route.id}', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
-            SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Text('Date: ${route.date}', style: TextStyle(color: Colors.white)),
-            SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Text('Title: ${route.title}', style: TextStyle(color: Colors.white)),
           ],
         ),
@@ -364,14 +365,14 @@ class HistoryScreen extends StatelessWidget {
         ),
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.all(20),
+            padding: EdgeInsets.only(top: 20.h, left: 20.w, right: 20.w, bottom: 20.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
                   child: Container(
-                    width: 225,
-                    height: 112,
+                    width: 225.w,
+                    height: 112.h,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(ImageManager.splashScreenLogo),
@@ -381,18 +382,18 @@ class HistoryScreen extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(height: 18),
+                SizedBox(height: 18.h),
 
                 Text(
                   "My Routes History",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22,
+                     fontSize: 28.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
 
-                SizedBox(height: 22),
+                SizedBox(height: 22.h),
 
                 Row(
                   children: [
@@ -400,8 +401,8 @@ class HistoryScreen extends StatelessWidget {
                           () => GestureDetector(
                         onTap: controller.toggleSelectAll,
                         child: Container(
-                          width: 24,
-                          height: 24,
+                          width: 24.w,
+                          height: 24.h,
                           decoration: BoxDecoration(
                             color: controller.selectAll.value
                                 ? Color(0xFFFF6B35)
@@ -410,9 +411,9 @@ class HistoryScreen extends StatelessWidget {
                               color: controller.selectAll.value
                                   ? Color(0xFFFF6B35)
                                   : AppColors.medGray,
-                              width: 2,
+                              width: 2.w,
                             ),
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(4.r),
                           ),
                           child: controller.selectAll.value
                               ? Icon(Icons.check, color: Colors.white, size: 16)
@@ -421,7 +422,7 @@ class HistoryScreen extends StatelessWidget {
                       ),
                     ),
 
-                    SizedBox(width: 12),
+                    SizedBox(width: 12.w),
 
                     Wrap(
                       spacing: 8,
@@ -438,71 +439,74 @@ class HistoryScreen extends StatelessWidget {
                   ],
                 ),
 
-                SizedBox(height: 15),
+                SizedBox(height: 15.h),
                 Divider(color: AppColors.white, thickness: 1),
-                SizedBox(height: 5),
+                SizedBox(height: 5.h),
 
                 // ✅ UPDATED: Search bar same as Team Manager (05c)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Icon(Icons.search, color: Colors.white, size: 24),
-                    SizedBox(width: 2),
+                    SizedBox(width: 2.w),
                     Container(
-                      width: 195,
-                      height: 32,
-                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      width: 195.w,
+                      height: 32.h,
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
                       decoration: BoxDecoration(
                         color: AppColors.medGray,
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(4.r),
                       ),
-                      child: TextField(
-                        controller: controller.searchController,
-                        cursorColor: AppColors.white,
-                        cursorHeight: 18,
-                        style: GoogleFonts.lato(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          height: 2.29,
-                        ),
-                        decoration: InputDecoration(
-                          hintStyle: GoogleFonts.lato(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            height: 1.29,
+                      child: Center(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: TextField(
+                            controller: controller.searchController,
+                            cursorColor: AppColors.white,
+                            cursorHeight: 18,
+                            style: GoogleFonts.lato(
+                              color: Colors.white,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            decoration: InputDecoration(
+                              hintStyle: GoogleFonts.lato(
+                                color: Colors.white,
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              border: InputBorder.none,
+                              isDense: true,
+                              contentPadding: EdgeInsets.zero,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              focusedErrorBorder: InputBorder.none,
+                            ),
+                            onChanged: controller.updateSearch,
                           ),
-                          border: InputBorder.none,
-                          isDense: true,
-                          contentPadding: EdgeInsets.zero,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          disabledBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          focusedErrorBorder: InputBorder.none,
                         ),
-                        onChanged: controller.updateSearch,
                       ),
                     ),
-                    SizedBox(width: 3),
+                    SizedBox(width: 3.w),
                     GestureDetector(
                       onTap: controller.searchRoutes, // ✅ Fixed: Now calls searchRoutes
                       child: Container(
-                        width: 33,
-                        height: 32,
+                        width: 33.w,
+                        height: 32.h,
                         decoration: BoxDecoration(
                           color: AppColors.medGray,
-                          borderRadius: BorderRadius.circular(4),
+                          borderRadius: BorderRadius.circular(4.r),
                         ),
                         child: Center(
                           child: Text(
                             'GO',
                             style: GoogleFonts.lato(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.w700,
-                              height: 2,
+                              height: 2.h,
                             ),
                           ),
                         ),
@@ -511,7 +515,7 @@ class HistoryScreen extends StatelessWidget {
                   ],
                 ),
 
-                SizedBox(height: 12),
+                SizedBox(height: 12.h),
 
                 Expanded(
                   child: Obx(
@@ -534,10 +538,10 @@ class HistoryScreen extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+        padding: EdgeInsets.symmetric(horizontal: 7.w, vertical: 1.h),
         decoration: BoxDecoration(
           color: AppColors.orange,
-          borderRadius: BorderRadius.circular(3),
+          borderRadius: BorderRadius.circular(3.r),
         ),
         child: FittedBox(
           fit: BoxFit.scaleDown,
@@ -545,7 +549,7 @@ class HistoryScreen extends StatelessWidget {
             text,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 14,
+              fontSize: 14.sp,
               fontFamily: 'Lato',
               fontWeight: FontWeight.w800,
             ),
@@ -564,12 +568,12 @@ class HistoryScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(vertical: 12),
+            padding: EdgeInsets.symmetric(vertical: 12.h),
             decoration: BoxDecoration(
               color: route.isSelected.value
                   ? Color(0xFF3A4A6B).withValues(alpha: 0.3)
                   : Colors.transparent,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.r),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -578,8 +582,8 @@ class HistoryScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: () => controller.toggleRoute(index),
                   child: Container(
-                    width: 24,
-                    height: 24,
+                    width: 24.w,
+                    height: 24.h,
                     decoration: BoxDecoration(
                       color: route.isSelected.value
                           ? Color(0xFFFF6B35)
@@ -588,9 +592,9 @@ class HistoryScreen extends StatelessWidget {
                         color: route.isSelected.value
                             ? Color(0xFFFF6B35)
                             : Colors.transparent,
-                        width: 2,
+                        width: 2.w,
                       ),
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: BorderRadius.circular(4.r),
                     ),
                     child: route.isSelected.value
                         ? Icon(Icons.check, color: Colors.white, size: 14)
@@ -598,7 +602,7 @@ class HistoryScreen extends StatelessWidget {
                   ),
                 ),
 
-                SizedBox(width: 12),
+                SizedBox(width: 12.w),
 
                 Expanded(
                   child: Column(
@@ -610,18 +614,18 @@ class HistoryScreen extends StatelessWidget {
                           color: route.isSelected.value
                               ? Color(0xFFFF6B35)
                               : Colors.white,
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      SizedBox(height: 4.h),
                       Text(
                         route.title,
                         style: TextStyle(
                           color: route.isSelected.value
                               ? Color(0xFFFF6B35).withValues(alpha: 0.8)
                               : Colors.white70,
-                          fontSize: 14,
+                          fontSize: 14.sp,
                         ),
                       ),
                     ],
@@ -643,7 +647,7 @@ class HistoryScreen extends StatelessWidget {
           ),
 
           if (index < controller.routes.length - 1)
-            Divider(color: AppColors.dividerColor, thickness: 1, height: 1),
+            Divider(color: AppColors.dividerColor, thickness: 1, height: 1.h),
         ],
       );
     });

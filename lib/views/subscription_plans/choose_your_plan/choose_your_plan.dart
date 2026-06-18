@@ -28,24 +28,27 @@ class ChooseYourPlan extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          children: [
-            SizedBox(height: 60),
-
-            /// Logo
-            Container(
-              width: 225,
-              height: 112,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(ImageManager.splashScreenLogo),
-                  fit: BoxFit.cover,
+        child: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(height: 20.h),
+              
+              /// Logo
+              Center(
+                child: Container(
+                  width: 225.w,
+                  height: 112.h,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(ImageManager.splashScreenLogo),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
               ),
-            ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.only(left: 15.w, right: 15.w, top: 20.w, bottom: 20.w),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -57,43 +60,43 @@ class ChooseYourPlan extends StatelessWidget {
                               'CHOOSE YOUR PLAN',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 32,
+                                fontSize: 32.sp,
                                 fontFamily: 'League Gothic',
                                 fontWeight: FontWeight.w400,
-                                height: 0.88,
+                                height: 0.88.h,
                                 letterSpacing: 1,
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            SizedBox(height: 21),
+                            SizedBox(height: 21.h),
 
                             /// Subtitle
                             Text(
                               'Start your 7-day free trial and begin automating your routes. Cancel anytime.',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 18,
+                                fontSize: 18.sp,
                                 fontFamily: 'Lato',
                                 fontWeight: FontWeight.w500,
-                                height: 1.56,
+                                height: 1.56.h,
                               ),
                               textAlign: TextAlign.center,
                             ),
-                            SizedBox(height: 18),
+                            SizedBox(height: 18.h),
 
                             Text(
                               'Individual Plan Options',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 20,
+                                fontSize: 20.sp,
                                 fontFamily: 'Lato',
                                 fontWeight: FontWeight.w700,
-                                height: 1.10,
+                                height: 1.10.h,
                               ),
                             ),
 
-                            SizedBox(height: 11),
+                            SizedBox(height: 11.h),
 
                             /// ============== ANNUAL PLAN TILE =================
                             Obx(
@@ -107,7 +110,7 @@ class ChooseYourPlan extends StatelessWidget {
                               ),
                             ),
 
-                            SizedBox(height: 13),
+                            SizedBox(height: 13.h),
 
                             /// MONTHLY PLAN TILE
                             Obx(
@@ -122,7 +125,7 @@ class ChooseYourPlan extends StatelessWidget {
                               ),
                             ),
 
-                            SizedBox(height: 10),
+                            SizedBox(height: 10.h),
 
                             TextButton(
                               onPressed: () {
@@ -136,10 +139,10 @@ class ChooseYourPlan extends StatelessWidget {
                                     'By clicking "Subscribe", you agree to the',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 18,
+                                      fontSize: 18.sp,
                                       fontFamily: 'Lato',
                                       fontWeight: FontWeight.w500,
-                                      height: 1.67,
+                                      height: 1.67.h,
                                     ),
                                   ),
                                   GestureDetector(
@@ -152,10 +155,10 @@ class ChooseYourPlan extends StatelessWidget {
                                       'RIGHT ROUTE SUBSCRIBER AGREEMENT',
                                       style: TextStyle(
                                         color: AppColors.purple,
-                                        fontSize: 20,
+                                        fontSize: 20.sp,
                                         fontFamily: 'League Gothic',
                                         fontWeight: FontWeight.w400,
-                                        height: 1.50,
+                                        height: 1.50.h,
                                         letterSpacing: 1,
                                       ),
                                     ),
@@ -163,16 +166,16 @@ class ChooseYourPlan extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 25),
+                            SizedBox(height: 25.h),
                             ButtonReusable(
                               text: 'SUBSCRIBE',
                               onPressed: () {
                                 Get.offAllNamed(AppRoutes.homeScreen);
                               },
-                              width: 250,
-                              height: 55,
+                              width: 250.w,
+                              height: 55.h,
                             ),
-                            SizedBox(height: 6),
+                            SizedBox(height: 6.h),
                             TextButton(
                               onPressed: () {
                                 // planController.restoreSubscription();
@@ -186,17 +189,17 @@ class ChooseYourPlan extends StatelessWidget {
                                     "SIGN IN WITH DIFFERENT EMAIL",
                                     style: TextStyle(
                                       color: AppColors.purple,
-                                      fontSize: 20,
+                                      fontSize: 20.sp,
                                       fontFamily: 'League Gothic',
                                       fontWeight: FontWeight.w400,
-                                      height: 1.50,
+                                      height: 1.50.h,
                                       letterSpacing: 1,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            SizedBox(height: 85),
+                            SizedBox(height: 85.h),
                             TextButton(
                               onPressed: () {
                                 // planController.restoreSubscription();
@@ -209,20 +212,20 @@ class ChooseYourPlan extends StatelessWidget {
                                     'Already a subscriber?',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 16,
+                                      fontSize: 16.sp,
                                       fontFamily: 'Lato',
                                       fontWeight: FontWeight.w500,
-                                      height: 1.75,
+                                      height: 1.75.h,
                                     ),
                                   ),
                                   Text(
                                     'RESTORE SUBSCRIPTION',
                                     style: TextStyle(
                                       color: AppColors.purple,
-                                      fontSize: 20,
+                                      fontSize: 20.sp,
                                       fontFamily: 'League Gothic',
                                       fontWeight: FontWeight.w400,
-                                      height: 1.40,
+                                      height: 1.40.h,
                                       letterSpacing: 1,
                                     ),
                                   ),
@@ -230,7 +233,7 @@ class ChooseYourPlan extends StatelessWidget {
                               ),
                             ),
 
-                            SizedBox(height: 49),
+                            SizedBox(height: 49.h),
                           ],
                         ),
                       ),
@@ -240,6 +243,7 @@ class ChooseYourPlan extends StatelessWidget {
               ),
             ),
           ],
+        ),
         ),
       ),
     );
@@ -257,24 +261,24 @@ Widget _planTile({
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      width: 392,
-      height: 76,
-      padding: EdgeInsets.symmetric(horizontal: 13),
+      width: 392.w,
+      height: 76.h,
+      padding: EdgeInsets.symmetric(horizontal: 13.w),
       decoration: BoxDecoration(
         color: selected ? AppColors.orange : AppColors.darkGray,
         // borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(width: 1, color: AppColors.medGray),
+        border: Border.all(width: 1.w, color: AppColors.medGray),
       ),
       child: Row(
         children: [
           /// LEFT SIDE CIRCLE (CHECK)
           Container(
-            width: 24,
-            height: 24,
+            width: 24.w,
+            height: 24.h,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border:
-                  selected ? Border.all(color: Colors.white, width: 2) : null,
+                  selected ? Border.all(color: Colors.white, width: 2.w) : null,
               color: selected ? AppColors.checkBoxColor : Colors.grey.shade500,
             ),
             child: selected
@@ -289,10 +293,10 @@ Widget _planTile({
             title,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 24,
+              fontSize: 24.sp,
               fontFamily: 'League Gothic',
               fontWeight: FontWeight.w400,
-              height: 1.17,
+              height: 1.17.h,
               letterSpacing: 1,
             ),
           ),
@@ -308,29 +312,29 @@ Widget _planTile({
                 price,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 30,
+                  fontSize: 30.sp,
                   fontFamily: 'League Gothic',
                   fontWeight: FontWeight.w400,
-                  height: 0.88,
+                  height: 0.88.h,
                   letterSpacing: 1,
                 ),
               ),
               if (badge != null)
                 Container(
-                  margin: EdgeInsets.only(top: 6),
-                  padding: EdgeInsets.symmetric(horizontal: 9),
+                  margin: EdgeInsets.only(top: 6.h),
+                  padding: EdgeInsets.symmetric(horizontal: 9.w),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(5.r),
                   ),
                   child: Text(
                     badge,
                     style: TextStyle(
                       color: AppColors.darkGray,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontFamily: 'Lato',
                       fontWeight: FontWeight.w700,
-                      height: 1.75,
+                      height: 1.75.h,
                     ),
                   ),
                 ),

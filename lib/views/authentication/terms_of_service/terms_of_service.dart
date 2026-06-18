@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:right_routes/utils/colors.dart';
 import 'package:flutter_svg/svg.dart';
@@ -17,11 +18,11 @@ class TermsModal extends StatelessWidget {
         // Fullscreen Grey Overlay
         child: Stack(
           children: [
-            SizedBox(height: 80),
+            SizedBox(height: 80.h),
 
             Positioned(
-              right: 12,
-              top: 40,
+              right: 12.w,
+              top: 40.h,
               child: GestureDetector(
                 onTap: () => Get.back(),
                 child: IconButton(
@@ -30,8 +31,8 @@ class TermsModal extends StatelessWidget {
 
                   icon: SvgPicture.asset(
                     "assets/icons/Close-X-Circle.svg",
-                    width: 30,
-                    height: 30,
+                    width: 30.w,
+                    height: 30.h,
                   ),
                 ),
               ),
@@ -39,12 +40,12 @@ class TermsModal extends StatelessWidget {
 
             /// FOREGROUND CONTENT (LEFT SIDE)
             Positioned(
-              left: 0,
-              right: 0,
-              top: 72,
-              bottom: 0,
+              left: 0.w,
+              right: 0.w,
+              top: 72.h,
+              bottom: 0.h,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 15.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -52,14 +53,14 @@ class TermsModal extends StatelessWidget {
                     Text(
                       "Terms of Service",
                       style: TextStyle(
-                        fontSize: 21,
+                        fontSize: 21.sp,
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.w700,
-                        height: 1.17,
+                        height: 1.17.h,
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 10.h),
 
                     /// Divider
                     Divider(thickness: 1, color: AppColors.dividerColor),
@@ -69,7 +70,7 @@ class TermsModal extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 12),
+                            SizedBox(height: 12.h),
 
                             /// Static Terms Content (Pixel-Perfect)
                             Text(
@@ -87,14 +88,14 @@ class TermsModal extends StatelessWidget {
                               "Cras dictum velora sapien, quis aliquet nulla tempor ut.",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 18,
+                                fontSize: 18.sp,
                                 fontFamily: 'Lato',
                                 fontWeight: FontWeight.w500,
-                                height: 1.44,
+                                height: 1.44.h,
                               ),
                             ),
 
-                            SizedBox(height: 40),
+                            SizedBox(height: 40.h),
 
                             /// =========== (Optional Dynamic Version - commented out) ===========
                             ///

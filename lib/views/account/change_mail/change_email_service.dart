@@ -1,4 +1,4 @@
-import 'package:http/http.dart' as http;
+import 'package:right_routes/core/constants/services/api_client.dart';
 import 'dart:convert';
 import '../../../core/constants/services/auth_service.dart';
 import '../../../core/constants/api_config/api_config.dart';
@@ -21,7 +21,7 @@ class ChangeEmailService {
       print('🔑 Token: ${token ?? "❌ No token found"}');
       print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
 
-      final response = await http.post(
+      final response = await ApiClient.post(
         Uri.parse(ApiConfig.fullChangeEmailUrl),
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +61,9 @@ class ChangeEmailService {
 
         return {
           'success': false,
-          'message': error['message'] ?? error['email']?.first ?? 'Failed to change email',
+          'message': error['message'] ??
+              error['email']?.first ??
+              'Failed to change email',
         };
       }
     } catch (e) {

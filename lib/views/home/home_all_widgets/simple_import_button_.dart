@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:right_routes/utils/colors.dart';
 
@@ -28,37 +29,37 @@ class SimpleImportButton extends StatelessWidget {
         children: [
           // BUTTON
           Container(
-            height: 64,
-            width: 296,
+            height: 64.h,
+            width: 296.w,
             decoration: BoxDecoration(
               color: AppColors.orange,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(10.r),
             ),
             child: Padding(
-              padding: const EdgeInsets.only(left:25), //  Left padding
+              padding: EdgeInsets.only(left:25.w), //  Left padding
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start, // Left aligned
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // LEFT ICON - Fixed width for alignment
                   SizedBox(
-                    width: 40, // Fixed width
+                    width: 40.w, // Fixed width
                     child: Center(
                       child: _buildLeftIcon(),
                     ),
                   ),
 
-                  const SizedBox(width: 5), // Icon-text spacing
+                  SizedBox(width: 5.w), // Icon-text spacing
 
                   // TEXT
                   Text(
                     text,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
-                      fontSize: 24,
+                      fontSize: 24.sp,
                       fontFamily: 'Bebas Neue',
                       fontWeight: FontWeight.w400,
-                      height: 1.17,
+                      height: 1.17.h,
                       letterSpacing: 2,
                     ),
                   ),
@@ -70,8 +71,8 @@ class SimpleImportButton extends StatelessWidget {
           // TOP-RIGHT QUESTION ICON (optional)
           if (rightIcon != null || onTab != null)
             Positioned(
-              top: 7,
-              right: 7,
+              top: 7.h,
+              right: 7.w,
               child: GestureDetector(
                 onTap: onTab,
                 child: Center(
@@ -88,12 +89,12 @@ class SimpleImportButton extends StatelessWidget {
     if (leftIcon.endsWith(".svg")) {
       return SvgPicture.asset(
         leftIcon,
-        height: 40,
-        width: 40,
+        height: 40.h,
+        width: 40.w,
         colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
       );
     } else {
-      return Image.asset(leftIcon, height: 40, width: 40);
+      return Image.asset(leftIcon, height: 40.h, width: 40.w);
     }
   }
 }

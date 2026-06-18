@@ -26,13 +26,13 @@ class AreYouSureDeleteThisAccount extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              SizedBox(height: 40),
+              SizedBox(height: 40.h),
 
               /// LOGO - FIXED AT TOP (No Scroll)
               Center(
                 child: Container(
-                  width: 225,
-                  height: 112,
+                  width: 225.w,
+                  height: 112.h,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(ImageManager.splashScreenLogo),
@@ -42,12 +42,12 @@ class AreYouSureDeleteThisAccount extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 39),
+              SizedBox(height: 39.h),
 
               /// SCROLLABLE CONTENT
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 18),
+                  padding: EdgeInsets.symmetric(horizontal: 15.w),
                   child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +56,7 @@ class AreYouSureDeleteThisAccount extends StatelessWidget {
                           'Are you sure?',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 28,
+                            fontSize: 28.sp,
                             fontFamily: 'Lato',
                             fontWeight: FontWeight.w700,
                             letterSpacing: 1,
@@ -67,14 +67,14 @@ class AreYouSureDeleteThisAccount extends StatelessWidget {
                           'Right Route - Oversized Load Navigator',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 20,
+                            fontSize: 20.sp,
                             fontFamily: 'Lato',
                             fontWeight: FontWeight.w700,
-                            height: 1.40,
+                            height: 1.40.h,
                             letterSpacing: 1,
                           ),
                         ),
-                        SizedBox(height: 17),
+                        SizedBox(height: 17.h),
 
                         /// TOP IMPORTANT SECTION
                         /// ---------------------------
@@ -85,7 +85,7 @@ class AreYouSureDeleteThisAccount extends StatelessWidget {
                                 text: "IMPORTANT: ",
                                 style: TextStyle(
                                   color: AppColors.orange,
-                                  fontSize: 20,
+                                  fontSize: 20.sp,
                                   fontFamily: 'Lato',
                                   fontWeight: FontWeight.bold,
                                   letterSpacing: 1,
@@ -96,7 +96,7 @@ class AreYouSureDeleteThisAccount extends StatelessWidget {
                                     "You need to cancel your subscription in the App or Google Play store first before deleting the account in this app. Deleting this account does not stop your subscription billing but you will lose app login access and all of your data including Route History.\n\n",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 20,
+                                  fontSize: 20.sp,
                                   fontFamily: 'Lato',
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 1,
@@ -107,7 +107,7 @@ class AreYouSureDeleteThisAccount extends StatelessWidget {
                                     "When you have canceled your subscription, the routing features of this app will inactive but you will still have access to your Route History and Settings until you delete this account. You will no longer be billed.",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 20,
+                                  fontSize: 20.sp,
                                   fontFamily: 'Lato',
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 1,
@@ -117,7 +117,7 @@ class AreYouSureDeleteThisAccount extends StatelessWidget {
                           ),
                         ),
 
-                        SizedBox(height: 18),
+                        SizedBox(height: 18.h),
 
                         RichText(
                           text: TextSpan(
@@ -126,10 +126,10 @@ class AreYouSureDeleteThisAccount extends StatelessWidget {
                                 text: "IMPORTANT: ",
                                 style: TextStyle(
                                   color: AppColors.white,
-                                  fontSize: 20,
+                                  fontSize: 20.sp,
                                   fontFamily: 'Lato',
                                   fontWeight: FontWeight.bold,
-                                  height: 1.40,
+                                  height: 1.40.h,
                                   letterSpacing: 1,
                                 ),
                               ),
@@ -138,10 +138,10 @@ class AreYouSureDeleteThisAccount extends StatelessWidget {
                                     "If you purchased a single user Yearly plan, your subscription will terminated at the end of its billing cycle. We don't offer refunds for unused months.",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 18,
+                                  fontSize: 18.sp,
                                   fontFamily: 'Lato',
                                   fontWeight: FontWeight.w700,
-                                  height: 1.40,
+                                  height: 1.40.h,
                                   letterSpacing: 1,
                                 ),
                               ),
@@ -149,7 +149,7 @@ class AreYouSureDeleteThisAccount extends StatelessWidget {
                           ),
                         ),
 
-                        SizedBox(height: 20),
+                        SizedBox(height: 20.h),
 
                         ButtonReusable(
                           onPressed: () => Get.toNamed(AppRoutes.accountDelete),
@@ -157,17 +157,17 @@ class AreYouSureDeleteThisAccount extends StatelessWidget {
                           width: double.infinity,
                         ),
 
-                        SizedBox(height: 21),
+                        SizedBox(height: 21.h),
 
                         ButtonReusable(
                           onPressed: () => Get.toNamed(AppRoutes.accountScreen),
                           text: 'NO. I’LL KEEP IT',
                           width: double.infinity,
-                          fontSize: 24,
+                          fontSize: 24.sp,
                           backgroundColor: AppColors.medGray,
                         ),
 
-                        SizedBox(height: 20), // Bottom padding
+                        SizedBox(height: 20.h), // Bottom padding
                       ],
                     ),
                   ),
@@ -189,7 +189,7 @@ class changeEmailController extends GetxController {
 
 Widget emailInputField(changeEmailController controller) {
   return Container(
-    height: 57,
+    height: 57.h,
     padding: EdgeInsets.symmetric(horizontal: 16.w),
     decoration: BoxDecoration(
       color: AppColors.medGray,
@@ -208,10 +208,10 @@ Widget emailInputField(changeEmailController controller) {
               hintText: "Enter new email",
               hintStyle: TextStyle(
                 color: const Color(0xFFBFBFBF),
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontFamily: 'Lato',
                 fontWeight: FontWeight.w400,
-                height: 1.75,
+                height: 1.75.h,
               ),
             ),
           ),

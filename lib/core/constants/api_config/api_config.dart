@@ -17,11 +17,11 @@ class ApiConfig {
       // Development URLs
       switch (currentDevice) {
         case DeviceType.androidEmulator:
-          return 'http://10.10.7.19:8000'; // Android emulator
+          return 'http://16.192.4.30:8003/api/v1'; // Android emulator
         case DeviceType.iosSimulator:
-          return 'http://10.10.7.19:8000'; // iOS simulator
+          return 'http://16.192.4.30:8003/api/v1'; // iOS simulator
         case DeviceType.realDevice:
-          return 'http://10.10.7.19:8000'; // Your actual backend IP
+          return 'http://16.192.4.30:8003/api/v1'; // Your actual backend IP
       }
     } else {
       // Production URL
@@ -30,15 +30,23 @@ class ApiConfig {
   }
 
   // ========== API ENDPOINTS ==========
+
+  static const String checkEmailEndpoint = '/auth/continue/';
+  
+
   static const String processOcrEndpoint = '/auth/api/process-ocr/';
   static const String loginEndpoint = '/auth/login/';
+  static const String createPasswordEndpoint = '/auth/create-password/';
   static const String registerEndpoint = '/auth/register/';
   static const String profileEndpoint = '/auth/profile/';
-  static const String checkEmailEndpoint = '/auth/check-email/';
   static const String requestOtpEndpoint = '/auth/request-otp/';
   static const String verifyOtpEndpoint = '/auth/verify-otp/';
   static const String changeEmailEndpoint = '/auth/change-email/';
   static const String changePasswordEndpoint = '/auth/change-password/';
+  static const String verifyTokenEndpoint = '/auth/verify-token/';
+  static const String refreshTokenEndpoint = '/auth/refresh-token/';
+
+  static const String logoutEndpoint = '/auth/logout/';
 
   // ========== FULL URLs ==========
   // static String get fullOcrUrl => '$baseUrl$processOcrEndpoint';
@@ -46,6 +54,7 @@ class ApiConfig {
   static String get fullOcrUrl => '$baseUrl$processOcrEndpoint';
   static String get fullUrl => fullOcrUrl; // ✅ Alias for backward compatibility
   static String get fullLoginUrl => '$baseUrl$loginEndpoint';
+  static String get fullCreatePasswordUrl => '$baseUrl$createPasswordEndpoint';
   static String get fullRegisterUrl => '$baseUrl$registerEndpoint';
   static String get fullProfileUrl => '$baseUrl$profileEndpoint';
   static String get fullCheckEmailUrl => '$baseUrl$checkEmailEndpoint';
@@ -53,6 +62,9 @@ class ApiConfig {
   static String get fullVerifyOtpUrl => '$baseUrl$verifyOtpEndpoint';
   static String get fullChangeEmailUrl => '$baseUrl$changeEmailEndpoint';
   static String get fullChangePasswordUrl => '$baseUrl$changePasswordEndpoint';
+  static String get fullVerifyTokenUrl => '$baseUrl$verifyTokenEndpoint';
+  static String get fullRefreshTokenUrl => '$baseUrl$refreshTokenEndpoint';
+  static String get fullLogoutUrl => '$baseUrl$logoutEndpoint';
 
   // ========== TIMEOUT CONFIGURATIONS ==========
   static const Duration connectionTimeout = Duration(seconds: 60);

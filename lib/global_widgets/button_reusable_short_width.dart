@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:right_routes/utils/colors.dart';
 
 class ButtonReusable extends StatelessWidget {
@@ -6,7 +7,7 @@ class ButtonReusable extends StatelessWidget {
   final VoidCallback? onPressed; // nullable — null হলে disabled state
 
   final double? width;
-  final double height;
+  final double? height;
   final double padding;
   final Color backgroundColor;
   final Color textColor;
@@ -14,17 +15,17 @@ class ButtonReusable extends StatelessWidget {
   final double borderRadius;
 
   const ButtonReusable({
-    Key? key,
+    super.key,
     required this.text,
     required this.onPressed,
     this.width,
-    this.height = 55,
+    this.height,
     this.padding = 10,
     this.backgroundColor = AppColors.orange,
     this.textColor = Colors.white,
     this.fontSize = 24,
     this.borderRadius = 10,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +35,13 @@ class ButtonReusable extends StatelessWidget {
         // ✅ disabled হলে হালকা দেখাবে
         opacity: onPressed == null ? 0.5 : 1.0,
         child: Container(
-          width: width ?? 234,
-          height: height,
-          padding: EdgeInsets.all(padding),
+          width: width ?? 234.w,
+          height: height ?? 58.h, // Standardized button height
+          padding: EdgeInsets.all(padding.r),
           decoration: ShapeDecoration(
             color: backgroundColor,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius),
+              borderRadius: BorderRadius.circular(borderRadius.r),
             ),
           ),
           child: Center(
@@ -49,10 +50,10 @@ class ButtonReusable extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: textColor,
-                fontSize: fontSize,
+                fontSize: fontSize.sp,
                 fontFamily: 'League Gothic',
                 fontWeight: FontWeight.w400,
-                height: 1.17,
+                height: 1.17, // multiplier, NOT logical pixels
                 letterSpacing: 2,
               ),
             ),

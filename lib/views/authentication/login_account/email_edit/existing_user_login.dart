@@ -118,7 +118,7 @@
 //           colorText: Colors.white,
 //           snackPosition: SnackPosition.TOP,
 //           duration: Duration(seconds: 3),
-//           margin: EdgeInsets.all(10),
+//           margin: EdgeInsets.all(10.w),
 //         );
 //         return false;
 //       }
@@ -133,7 +133,7 @@
 //           colorText: Colors.white,
 //           snackPosition: SnackPosition.TOP,
 //           duration: Duration(seconds: 4),
-//           margin: EdgeInsets.all(10),
+//           margin: EdgeInsets.all(10.w),
 //         );
 //         return false;
 //       }
@@ -164,8 +164,8 @@
 //           colorText: Colors.white,
 //           snackPosition: SnackPosition.TOP,
 //           duration: Duration(seconds: 2),
-//           margin: EdgeInsets.all(10),
-//           icon: Icon(Icons.check_circle, color: Colors.white, size: 35),
+//           margin: EdgeInsets.all(10.w),
+//           icon: Icon(Icons.check_circle, color: Colors.white, size: 35.sp),
 //           shouldIconPulse: true,
 //         );
 //
@@ -186,7 +186,7 @@
 //           colorText: Colors.white,
 //           snackPosition: SnackPosition.TOP,
 //           duration: Duration(seconds: 2),
-//           margin: EdgeInsets.all(10),
+//           margin: EdgeInsets.all(10.w),
 //         );
 //         return false;
 //       }
@@ -227,7 +227,7 @@
 //         colorText: Colors.white,
 //         snackPosition: SnackPosition.TOP,
 //         duration: Duration(seconds: 3),
-//         margin: EdgeInsets.all(10),
+//         margin: EdgeInsets.all(10.w),
 //       );
 //       return false;
 //
@@ -242,7 +242,7 @@
 //         colorText: Colors.white,
 //         snackPosition: SnackPosition.TOP,
 //         duration: Duration(seconds: 2),
-//         margin: EdgeInsets.all(10),
+//         margin: EdgeInsets.all(10.w),
 //       );
 //       return false;
 //     }
@@ -273,16 +273,16 @@
 //         ),
 //         child: SafeArea(
 //           child: SingleChildScrollView(
-//             padding: EdgeInsets.symmetric(horizontal: 19),
+//             padding: EdgeInsets.symmetric(horizontal: 19.w),
 //             child: Column(
 //               mainAxisSize: MainAxisSize.min,
 //               children: [
-//                 SizedBox(height: 21),
+//                 SizedBox(height: 21.h),
 //
 //                 // Logo
 //                 Container(
-//                   width: 225,
-//                   height: 112,
+//                   width: 225.w,
+//                   height: 112.h,
 //                   decoration: BoxDecoration(
 //                     image: DecorationImage(
 //                       image: AssetImage(ImageManager.splashScreenLogo),
@@ -291,7 +291,7 @@
 //                   ),
 //                 ),
 //
-//                 SizedBox(height: 21),
+//                 SizedBox(height: 21.h),
 //
 //                 Column(
 //                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,24 +301,24 @@
 //                       'Good News you already have a Right Route account',
 //                       style: TextStyle(
 //                         color: Colors.white,
-//                         fontSize: 25,
+//                         fontSize: 25.sp,
 //                         fontFamily: 'Lato',
 //                         fontWeight: FontWeight.w700,
-//                         height: 1.12,
+//                         height: 1.12.h,
 //                       ),
 //                     ),
 //
-//                     SizedBox(height: 17),
+//                     SizedBox(height: 17.h),
 //
 //                     /// EMAIL TEXT
 //                     Text(
 //                       'Since you\'ve already used your email to sign up for this service, you can now log in using',
 //                       style: TextStyle(
 //                         color: Colors.white,
-//                         fontSize: 18,
+//                         fontSize: 18.sp,
 //                         fontFamily: 'Lato',
 //                         fontWeight: FontWeight.w500,
-//                         height: 1.44,
+//                         height: 1.44.h,
 //                       ),
 //                     ),
 //
@@ -329,13 +329,13 @@
 //                           'tanvirhasan890@gmail.com',
 //                           style: TextStyle(
 //                             color: AppColors.white,
-//                             fontSize: 18,
+//                             fontSize: 18.sp,
 //                             fontFamily: 'Lato',
 //                             fontWeight: FontWeight.bold,
-//                             height: 1.44,
+//                             height: 1.44.h,
 //                           ),
 //                         ),
-//                         SizedBox(width: 4),
+//                         SizedBox(width: 4.w),
 //                         GestureDetector(
 //                           onTap: () {
 //                             Get.toNamed(AppRoutes.emailEdit);
@@ -344,38 +344,38 @@
 //                             'edit',
 //                             style: TextStyle(
 //                               color: AppColors.purple,
-//                               fontSize: 18,
+//                               fontSize: 18.sp,
 //                               fontFamily: 'Lato',
 //                               fontWeight: FontWeight.bold,
-//                               height: 1.44,
+//                               height: 1.44.h,
 //                             ),
 //                           ),
 //                         ),
 //                       ],
 //                     ),
 //
-//                     SizedBox(height: 14),
+//                     SizedBox(height: 14.h),
 //
 //                     Text(
 //                       'Enter your current password to log in.',
 //                       style: TextStyle(
 //                         color: Colors.white,
-//                         fontSize: 18,
+//                         fontSize: 18.sp,
 //                         fontFamily: 'Lato',
 //                         fontWeight: FontWeight.w500,
-//                         height: 1.56,
+//                         height: 1.56.h,
 //                       ),
 //                     ),
 //
-//                     SizedBox(height: 9),
+//                     SizedBox(height: 9.h),
 //
 //                     /// PASSWORD FIELD
 //                     Container(
-//                       height: 57,
-//                       padding: EdgeInsets.symmetric(horizontal: 14),
+//                       height: 57.h,
+//                       padding: EdgeInsets.symmetric(horizontal: 14.w),
 //                       decoration: BoxDecoration(
 //                         color: AppColors.medGray,
-//                         borderRadius: BorderRadius.circular(10),
+//                         borderRadius: BorderRadius.circular(10.r),
 //                       ),
 //                       child: Row(
 //                         children: [
@@ -388,10 +388,10 @@
 //                                 hintText: 'password',
 //                                 hintStyle: TextStyle(
 //                                   color: const Color(0xFFBFBFBF),
-//                                   fontSize: 16,
+//                                   fontSize: 16.sp,
 //                                   fontFamily: 'Lato',
 //                                   fontWeight: FontWeight.w400,
-//                                   height: 1.75,
+//                                   height: 1.75.h,
 //                                 ),
 //                               ),
 //                             )),
@@ -409,7 +409,7 @@
 //                       ),
 //                     ),
 //
-//                     SizedBox(height: 24),
+//                     SizedBox(height: 24.h),
 //
 //                     /// ============ LOGIN BUTTON + FINGERPRINT ================
 //                     Row(
@@ -420,7 +420,7 @@
 //                               Get.toNamed(AppRoutes.homeNewRoutes);
 //                             },
 //                             child: Container(
-//                               height: 50,
+//                               height: 50.h,
 //                               decoration: BoxDecoration(
 //                                 color: AppColors.orange,
 //                                 borderRadius: BorderRadius.circular(10.r),
@@ -430,10 +430,10 @@
 //                                   'LOG IN',
 //                                   style: TextStyle(
 //                                     color: Colors.white,
-//                                     fontSize: 24,
+//                                     fontSize: 24.sp,
 //                                     fontFamily: "League Gothic",
 //                                     fontWeight: FontWeight.w600,
-//                                     height: 1.17,
+//                                     height: 1.17.h,
 //                                     letterSpacing: 2,
 //                                   ),
 //                                 ),
@@ -441,7 +441,7 @@
 //                             ),
 //                           ),
 //                         ),
-//                         SizedBox(width: 10),
+//                         SizedBox(width: 10.w),
 //
 //                         /// ✅ FINGERPRINT BUTTON - FULLY FUNCTIONAL WITH ANIMATIONS
 //                         Obx(() => GestureDetector(
@@ -452,19 +452,19 @@
 //                           },
 //                           child: AnimatedContainer(
 //                             duration: Duration(milliseconds: 150),
-//                             height: 50,
-//                             width: 55,
+//                             height: 50.h,
+//                             width: 55.w,
 //                             decoration: BoxDecoration(
 //                               color: controller.availableBiometrics.isEmpty
 //                                   ? AppColors.orange
 //                                   : AppColors.orange,
-//                               borderRadius: BorderRadius.circular(50),
+//                               borderRadius: BorderRadius.circular(50.r),
 //                             ),
 //                             child: Center(
 //                               child: Icon(
 //                                 Icons.fingerprint,
 //                                 color: AppColors.white,
-//                                 size: 45,
+//                                 size: 45.sp,
 //                               ),
 //                             ),
 //                           ),
@@ -472,14 +472,14 @@
 //                       ],
 //                     ),
 //
-//                     SizedBox(height: 15),
+//                     SizedBox(height: 15.h),
 //
 //                     /// ✅ TOUCH ID SWITCH
 //                     Row(
 //                       children: [
 //                         CustomToggleSwitchAdvanced(
-//                           height: 24,
-//                           width: 51,
+//                           height: 24.h,
+//                           width: 51.w,
 //                           value: loginTroggleController.isEnabled,
 //                           onChanged: (val) {
 //                             controller.toggleTouchID(val);
@@ -489,12 +489,12 @@
 //                           activeColor: AppColors.orange,
 //                           inactiveColor: Colors.white.withOpacity(0.3),
 //                         ),
-//                         SizedBox(width: 7),
+//                         SizedBox(width: 7.w),
 //                         Text(
 //                           'Use touch ID',
 //                           style: TextStyle(
 //                             color: Colors.white,
-//                             fontSize: 16,
+//                             fontSize: 16.sp,
 //                             fontFamily: 'Lato',
 //                             fontWeight: FontWeight.w500,
 //                           ),
@@ -502,7 +502,7 @@
 //                       ],
 //                     ),
 //
-//                     SizedBox(height: 45),
+//                     SizedBox(height: 45.h),
 //
 //                     /// TROUBLE LOGGING IN
 //                     GestureDetector(
@@ -513,16 +513,16 @@
 //                         'Having trouble logging in? Send a one time code.',
 //                         style: TextStyle(
 //                           color: const Color(0xFF9DACF5),
-//                           fontSize: 16,
+//                           fontSize: 16.sp,
 //                           fontFamily: 'Lato',
 //                           fontWeight: FontWeight.w500,
-//                           height: 1.38,
+//                           height: 1.38.h,
 //                         ),
 //                         textAlign: TextAlign.start,
 //                       ),
 //                     ),
 //
-//                     SizedBox(height: 20),
+//                     SizedBox(height: 20.h),
 //                   ],
 //                 ),
 //               ],

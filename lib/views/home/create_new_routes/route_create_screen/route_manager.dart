@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:right_routes/core/routes/all_routes.dart';
 import '../../../../../global_widgets/custom_navbar.dart';
 import '../../../../../utils/assets_manager.dart';
 
@@ -75,7 +73,7 @@ class RouteManager extends StatelessWidget {
                       height: 56.h,
                       decoration: BoxDecoration(
                         color: const Color(0xFFF48436), // Matches screenshot's orange
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(10.r),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

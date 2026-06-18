@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ✅ FIX: flutter_screenutil dependency সরানো হয়েছে
 // ScreenUtilInit wrap না থাকলে crash করত — এখন MediaQuery দিয়ে responsive করা হয়েছে
@@ -18,10 +19,10 @@ class PasswordStrengthBar extends StatelessWidget {
       children: [
         AnimatedContainer(
           duration: const Duration(milliseconds: 400),
-          height: 6,
+          height: 6.h,
           width: totalWidth,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.circular(4.r),
             color: Colors.grey.shade700,
           ),
           child: Align(
@@ -30,18 +31,18 @@ class PasswordStrengthBar extends StatelessWidget {
               duration: const Duration(milliseconds: 400),
               width: _getProgressWidth(strength, totalWidth),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(4.r),
                 color: _getActiveColor(strength),
               ),
             ),
           ),
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: 4.h),
         Text(
           _getLabel(strength),
           style: TextStyle(
             color: _getActiveColor(strength),
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w600,
           ),
         ),

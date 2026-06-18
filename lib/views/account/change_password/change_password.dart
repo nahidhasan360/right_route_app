@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:right_routes/core/routes/all_routes.dart';
 import 'package:right_routes/global_widgets/button_reusable_short_width.dart';
@@ -6,7 +7,6 @@ import 'package:right_routes/global_widgets/custom_navbar.dart';
 import 'package:right_routes/utils/colors.dart';
 import '../../../../utils/assets_manager.dart';
 import 'change_password_service.dart';
-
 
 class ChangePassword extends StatelessWidget {
   ChangePassword({super.key});
@@ -32,17 +32,17 @@ class ChangePassword extends StatelessWidget {
         ),
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 15.w),
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(height: 40),
+                  SizedBox(height: 20.h),
 
                   /// LOGO
                   Center(
                     child: Container(
-                      width: 225,
-                      height: 112,
+                      width: 225.w,
+                      height: 112.h,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(ImageManager.splashScreenLogo),
@@ -51,7 +51,7 @@ class ChangePassword extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 39),
+                  SizedBox(height: 39.h),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,25 +60,25 @@ class ChangePassword extends StatelessWidget {
                         'Change Password',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 28,
+                          fontSize: 28.sp,
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w700,
                           letterSpacing: 1,
                         ),
                       ),
                       Divider(color: AppColors.white, thickness: 1),
-                      SizedBox(height: 5),
+                      SizedBox(height: 5.h),
                       Text(
                         'This replaces the password you use to log in to this app account.',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w500,
                           height: 1.44,
                         ),
                       ),
-                      SizedBox(height: 27),
+                      SizedBox(height: 27.h),
                       // Password Input section
                       _buildPasswordField(context),
                       // Password strength bar section (Animated)
@@ -86,7 +86,7 @@ class ChangePassword extends StatelessWidget {
 
                       // Password criteria section with validation
                       Obx(
-                            () => Column(
+                        () => Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _ruleTile(
@@ -94,7 +94,7 @@ class ChangePassword extends StatelessWidget {
                               changePassController.isSixChars.value,
                               "Use a minimum of six characters (Case sensitive)",
                             ),
-                            SizedBox(height: 12),
+                            SizedBox(height: 12.h),
                             _ruleTile(
                               context,
                               changePassController.hasNumberOrSpecial.value,
@@ -104,25 +104,25 @@ class ChangePassword extends StatelessWidget {
                         ),
                       ),
 
-                      SizedBox(height: 28),
+                      SizedBox(height: 28.h),
 
                       // 🔥 Updated Button with API Integration
                       Obx(() => ButtonReusable(
-                        onPressed: changePassController.isLoading.value
-                            ? null
-                            : () => changePassController.changePassword(),
-                        text: changePassController.isLoading.value
-                            ? 'SAVING...'
-                            : 'SAVE & CONTINUE',
-                        width: double.infinity,
-                      )),
+                            onPressed: changePassController.isLoading.value
+                                ? null
+                                : () => changePassController.changePassword(),
+                            text: changePassController.isLoading.value
+                                ? 'SAVING...'
+                                : 'SAVE & CONTINUE',
+                            width: double.infinity,
+                          )),
 
-                      SizedBox(height: 20),
+                      SizedBox(height: 20.h),
                       ButtonReusable(
                         onPressed: () => Get.back(),
                         text: 'CANCEL',
                         width: double.infinity,
-                        fontSize: 24,
+                        fontSize: 24.sp,
                         backgroundColor: AppColors.medGray,
                       ),
                     ],
@@ -145,15 +145,16 @@ class ChangePassword extends StatelessWidget {
       final label = changePassController.strengthLabel.value;
 
       return Padding(
-        padding: EdgeInsets.only(top: 15, bottom: 15, left: 0, right: 70),
+        padding: EdgeInsets.only(
+            top: 15.h, bottom: 15.h, left: 0.w, right: 70.w),
         child: Row(
           children: [
             Expanded(
               child: Container(
-                height: 8,
+                height: 8.h,
                 decoration: BoxDecoration(
                   color: Color(0xFF4A4A4A),
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(10.r),
                 ),
                 child: Stack(
                   children: [
@@ -165,7 +166,7 @@ class ChangePassword extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           color: color,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(10.r),
                         ),
                       ),
                     ),
@@ -173,14 +174,14 @@ class ChangePassword extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 12),
+            SizedBox(width: 12.w),
             SizedBox(
-              width: 60,
+              width: 60.w,
               child: AnimatedDefaultTextStyle(
                 duration: Duration(milliseconds: 300),
                 style: TextStyle(
                   color: color,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontFamily: 'Lato',
                   fontWeight: FontWeight.w600,
                 ),
@@ -196,18 +197,18 @@ class ChangePassword extends StatelessWidget {
   /// ================= Password Field ======================
   Widget _buildPasswordField(BuildContext context) {
     return Obx(
-          () => Container(
-        width: 388,
-        height: 48,
+      () => Container(
+        width: 388.w,
+        height: 48.h,
         decoration: ShapeDecoration(
           color: AppColors.medGray,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
           ),
         ),
         child: Row(
           children: [
-            SizedBox(width: 16),
+            SizedBox(width: 16.w),
             Expanded(
               child: TextField(
                 controller: changePassController.changeEditing,
@@ -218,7 +219,7 @@ class ChangePassword extends StatelessWidget {
                 cursorHeight: 20,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontFamily: 'Lato',
                 ),
                 decoration: InputDecoration(
@@ -226,10 +227,11 @@ class ChangePassword extends StatelessWidget {
                   hintStyle: TextStyle(
                     color: Color(0xffBFBFBF),
                     fontWeight: FontWeight.w400,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontFamily: 'Lato',
-                    height: 1.75,
                   ),
+                  isDense: true,
+                  contentPadding: EdgeInsets.symmetric(vertical: 14.h),
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,
@@ -242,7 +244,7 @@ class ChangePassword extends StatelessWidget {
             GestureDetector(
               onTap: changePassController.togglePasswordVisibility,
               child: Padding(
-                padding: EdgeInsets.only(right: 16),
+                padding: EdgeInsets.only(right: 16.w),
                 child: Icon(
                   changePassController.isPasswordHidden.value
                       ? Icons.visibility_off_outlined
@@ -264,33 +266,33 @@ class ChangePassword extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 20,
-          height: 20,
-          margin: EdgeInsets.only(top: 2),
+          width: 20.w,
+          height: 20.h,
+          margin: EdgeInsets.only(top: 2.h),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: active ? AppColors.orange : AppColors.medGray,
             border: Border.all(
               color: active ? AppColors.orange : AppColors.medGray,
-              width: 2,
+              width: 2.w,
             ),
           ),
           child: active
               ? Icon(
-            Icons.check,
-            color: Colors.white,
-            size: 14,
-            fontWeight: FontWeight.bold,
-          )
+                  Icons.check,
+                  color: Colors.white,
+                  size: 14,
+                  fontWeight: FontWeight.bold,
+                )
               : null,
         ),
-        SizedBox(width: 7),
+        SizedBox(width: 7.w),
         Expanded(
           child: Text(
             text,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: 16.sp,
               fontFamily: 'Lato',
             ),
           ),
@@ -400,11 +402,7 @@ class ChangePasswordController extends GetxController {
     // Validation
     String newPassword = password.value.trim();
 
-    print('\n🔍 PASSWORD VALIDATION CHECK');
-    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-
     if (newPassword.isEmpty) {
-      print('❌ Password is empty');
       Get.snackbar(
         'Error',
         'Please enter a password',
@@ -416,7 +414,6 @@ class ChangePasswordController extends GetxController {
     }
 
     if (!isPasswordValid.value) {
-      print('❌ Password does not meet requirements');
       Get.snackbar(
         'Error',
         'Password must meet all requirements',
@@ -427,25 +424,18 @@ class ChangePasswordController extends GetxController {
       return;
     }
 
-    print('✅ Password validation passed');
-    print('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-
     // Start loading
     isLoading.value = true;
-    print('⏳ Loading started...\n');
 
     // 🔥 Call API
     final result = await ChangePasswordService.changePassword(newPassword);
 
     // Stop loading
     isLoading.value = false;
-    print('⏳ Loading stopped\n');
 
     // Check result
     if (result['success']) {
       // ✅ Success
-      print('🎉 Password change successful!');
-
       Get.snackbar(
         'Success',
         result['message'],
@@ -458,11 +448,8 @@ class ChangePasswordController extends GetxController {
       // Navigate to success screen
       await Future.delayed(Duration(milliseconds: 500));
       Get.toNamed(AppRoutes.passwordSaved);
-
     } else {
       // ❌ Error
-      print('💥 Password change failed!');
-
       Get.snackbar(
         'Error',
         result['message'],

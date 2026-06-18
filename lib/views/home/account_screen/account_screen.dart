@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:right_routes/core/routes/all_routes.dart';
 import 'package:right_routes/global_widgets/custom_navbar.dart';
 import 'package:right_routes/utils/colors.dart';
 import '../../../core/constants/services/auth_service.dart';
 import '../../../utils/assets_manager.dart';
-import '../../authentication/enter_email_for_delete/enter_email_for_delete.dart';
-import '../../authentication/login_account/login_account.dart';
+import 'logout_api_service.dart';
 
 // -----------------------------------------------------------------------------
 // CONTROLLER (GetX)
@@ -35,15 +35,21 @@ class RRColors {
 class RRRightArrowTile extends StatelessWidget {
   final String title;
   final VoidCallback? onTap;
+  final FontWeight fontWeight;
 
-  const RRRightArrowTile({super.key, required this.title, this.onTap});
+  const RRRightArrowTile({
+    super.key,
+    required this.title,
+    this.onTap,
+    this.fontWeight = FontWeight.w700,
+  });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap ?? () {},
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 5),
+        padding: EdgeInsets.symmetric(vertical: 5.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -51,10 +57,10 @@ class RRRightArrowTile extends StatelessWidget {
               title,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: 19.sp,
                 fontFamily: 'Lato',
-                fontWeight: FontWeight.w700,
-                height: 1.56,
+                fontWeight: fontWeight,
+                height: 1.56.h,
               ),
             ),
             Icon(Icons.arrow_forward_ios, color: RRColors.white, size: 26.sp),
@@ -85,58 +91,63 @@ class AccountScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          children: [
-            SizedBox(height: 50),
+        child: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(height: 20.h),
 
-            // Sticky Logo (Always stays at the top)
-            _buildLogo(),
+              // Sticky Logo (Always stays at the top)
+              _buildLogo(),
 
-            // Scrollable Body
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 20),
-                    _buildSectionTitle("Manage Account"),
-                    _buildDivider(),
-                    _buildEmailSection(),
-                    SizedBox(height: 3),
-                    _buildPasswordSection(),
-                    SizedBox(height: 1),
-                    _buildRouteHistory(),
-                    SizedBox(height: 1),
-                    _buildDivider(),
-                    _buildCurrentPlan(),
-                    _buildDivider(),
-                    _buildCustomerCare(),
-                    _buildDivider(),
-                    _buildLegalSection(),
-                    _buildDivider(),
-                    SizedBox(height: 12),
-                    _buildVersion(),
-                    SizedBox(height: 18),
-                    _buildExitButton(),
-                    SizedBox(height: 60),
-                  ],
+              // Scrollable Body
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 20.h),
+                      _buildSectionTitle("Manage Account"),
+                      _buildDivider(),
+                      _buildEmailSection(),
+                      SizedBox(height: 6.h),
+                      _buildPasswordSection(),
+                      SizedBox(height: 4.h),
+                      _buildRouteHistory(),
+                      SizedBox(height: 1.h),
+                      _buildDivider(),
+                      _buildCurrentPlan(),
+                      _buildDivider(),
+                      _buildCustomerCare(),
+                      _buildDivider(),
+                      _buildLegalSection(),
+                      _buildDivider(),
+                      SizedBox(height: 12.h),
+                      _buildVersion(),
+                      SizedBox(height: 12.h),
+                      _buildDivider(),
+                      _buildLogoutSection(),
+                      SizedBox(height: 18.h),
+                      _buildExitButton(),
+                      SizedBox(height: 60.h),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: CustomNavbar(),
     );
   }
 
-  // =====================================   logo ================================
+  // ===================================== logo ================================
   Widget _buildLogo() {
     return Center(
       child: Container(
-        width: 225,
-        height: 112,
+        width: 225.w,
+        height: 112.h,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(ImageManager.splashScreenLogo),
@@ -153,10 +164,10 @@ class AccountScreen extends StatelessWidget {
       title,
       style: TextStyle(
         color: Colors.white,
-        fontSize: 28,
+        fontSize: 28.sp,
         fontFamily: 'Lato',
         fontWeight: FontWeight.w700,
-        height: 1.14,
+        height: 1.14.h,
         letterSpacing: 1,
       ),
     );
@@ -171,17 +182,17 @@ class AccountScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Email:",
+          "Email",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: 18.sp,
             fontFamily: 'Lato',
             fontWeight: FontWeight.w500,
-            height: 1.56,
+            height: 1.56.h,
           ),
         ),
         RRRightArrowTile(
-          title: "tanvirhasancr890890@gmail.com",
+          title: "emailaddress@email.com",
           onTap: () {
             Get.toNamed(AppRoutes.changeEmail);
           },
@@ -200,25 +211,56 @@ class AccountScreen extends StatelessWidget {
               "Password",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: 18.sp,
                 fontFamily: 'Lato',
                 fontWeight: FontWeight.w500,
-                height: 1.56,
+                height: 1.56.h,
               ),
             ),
-            SizedBox(width: 3),
+            SizedBox(width: 7.w),
             Obx(() {
               return GestureDetector(
                 onTap: c.togglePassword,
-                child: Icon(
+                child: SvgPicture.asset(
                   c.showPassword.value
-                      ? Icons.visibility_off
-                      : Icons.visibility,
-                  size: 24,
-                  color: AppColors.white,
+                      ? SvgManager.eyeSlashBigPupil
+                      : SvgManager.eyeBigPupil,
+                  width: 24.w,
+                  height: 24.h,
+                  colorFilter: const ColorFilter.mode(
+                    AppColors.white,
+                    BlendMode.srcIn,
+                  ),
                 ),
               );
             }),
+          ],
+        ),
+        SizedBox(height: 1.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Obx(() {
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 5.h),
+                child: Text(
+                  c.showPassword.value ? "mypassword123" : "**********",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.sp,
+                    fontFamily: 'Lato',
+                    fontWeight: FontWeight.w700,
+                    height: 0.88,
+                  ),
+                ),
+              );
+            }),
+            RRRightArrowTile(
+              title: "",
+              onTap: () {
+                Get.toNamed(AppRoutes.changePassword);
+              },
+            ),
           ],
         ),
       ],
@@ -226,42 +268,12 @@ class AccountScreen extends StatelessWidget {
   }
 
   Widget _buildRouteHistory() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Obx(() {
-              return Text(
-                c.showPassword.value ? "mypassword123" : "***************",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
-                  fontFamily: 'Lato',
-                  fontWeight: FontWeight.w700,
-                  height: 0.88,
-                ),
-              );
-            }),
-            RRRightArrowTile(
-              title: "",
-              onTap: () {
-                // Navigate to route history screen
-                Get.toNamed(AppRoutes.changePassword);
-              },
-            ),
-          ],
-        ),
-        RRRightArrowTile(
-          title: "My Route History",
-          onTap: () {
-            // Navigate to route history screen
-            Get.toNamed(AppRoutes.historyScreen);
-          },
-        ),
-      ],
+    return RRRightArrowTile(
+      title: "My Route History",
+      fontWeight: FontWeight.w500,
+      onTap: () {
+        Get.toNamed(AppRoutes.historyScreen);
+      },
     );
   }
 
@@ -269,152 +281,65 @@ class AccountScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 15),
+        SizedBox(height: 8.h),
         Text(
-          "MY CURRENT PLAN",
+          "CURRENT PLAN",
           style: TextStyle(
             color: AppColors.orange,
-            fontSize: 24,
+            fontSize: 24.sp,
             fontFamily: 'League Gothic',
             fontWeight: FontWeight.w400,
-            height: 1.17,
+            height: 1.17.h,
             letterSpacing: 1.50,
           ),
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 10.h),
         Text(
-          "[ Plan name here ]",
+          "sub.100 monthly",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: 18.sp,
             fontFamily: 'Lato',
             fontWeight: FontWeight.w500,
-            height: 1.56,
+            height: 1.56.h,
           ),
         ),
+        SizedBox(height: 10.h),
         Text(
-          "Users: xxxx",
+          "Enrolled Users: 4 of 100",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: 18.sp,
             fontFamily: 'Lato',
             fontWeight: FontWeight.w500,
-            height: 1.56,
+            height: 1.56.h,
           ),
         ),
+        SizedBox(height: 10.h),
         Text(
-          "Renewal Date: Nov 29, 2025",
+          "Renewal Date: 07/03/2026",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: 18.sp,
             fontFamily: 'Lato',
             fontWeight: FontWeight.w500,
-            height: 1.56,
+            height: 1.56.h,
           ),
         ),
-        SizedBox(height: 10),
-        _buildPlanActions(),
-      ],
-    );
-  }
-
-  Widget _buildPlanActions() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GestureDetector(
-              onTap: () {
-                Get.toNamed(AppRoutes.chooseATeamPlan);
-              },
-              child: Text.rich(
-                TextSpan(
-                  text: "Team Plans: ",
-                  style: TextStyle(
-                    color: AppColors.orange,
-                    fontSize: 18,
-                    fontFamily: 'Lato',
-                    fontWeight: FontWeight.w500,
-                    height: 1.56,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: "Upgrade or Downgrade",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontFamily: 'Lato',
-                        fontWeight: FontWeight.w500,
-                        height: 1.56,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            RRRightArrowTile(
-              onTap: () {
-                // Navigate to help center
-                Get.toNamed(AppRoutes.chooseATeamPlan);
-              },
-              title: '',
-            ),
-          ],
+        SizedBox(height: 4.h),
+        RRRightArrowTile(
+          title: "Change Plan",
+          fontWeight: FontWeight.w500,
+          onTap: () {
+            Get.toNamed(AppRoutes.chooseYourPlan);
+          },
         ),
         RRRightArrowTile(
           title: "Manage Team",
+          fontWeight: FontWeight.w500,
           onTap: () {
-            // Navigate to manage team page
             Get.toNamed(AppRoutes.teamManager);
           },
-        ),
-        SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: () {
-                  Get.toNamed(AppRoutes.chooseYourPlan);
-                },
-                child: Text.rich(
-                  TextSpan(
-                    text: "Single User Plan: ",
-                    style: TextStyle(
-                      color: AppColors.orange,
-                      fontSize: 18,
-                      fontFamily: 'Lato',
-                      fontWeight: FontWeight.w500,
-                      height: 1.56,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: "Upgrade to Yearly Plan",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontFamily: 'Lato',
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                ),
-              ),
-            ),
-            RRRightArrowTile(
-              onTap: () {
-                Get.toNamed(AppRoutes.chooseYourPlan);
-              },
-              title: '',
-            ),
-          ],
         ),
       ],
     );
@@ -424,31 +349,24 @@ class AccountScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 16),
+        SizedBox(height: 10.h),
         Text(
           "CUSTOMER CARE",
           style: TextStyle(
             color: AppColors.orange,
-            fontSize: 24,
+            fontSize: 24.sp,
             fontFamily: 'League Gothic',
             fontWeight: FontWeight.w400,
-            height: 1.17,
+            height: 1.17.h,
             letterSpacing: 1.50,
           ),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 10.h),
         RRRightArrowTile(
           title: "Contact Support",
+          fontWeight: FontWeight.w500,
           onTap: () {
-            // Navigate to support page
             Get.toNamed(AppRoutes.contactSupport);
-          },
-        ),
-        RRRightArrowTile(
-          title: "Help Center",
-          onTap: () {
-            // Navigate to help center
-            Get.toNamed(AppRoutes.help);
           },
         ),
       ],
@@ -459,44 +377,64 @@ class AccountScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 17),
+        SizedBox(height: 17.h),
         Text(
           "LEGAL",
           style: TextStyle(
             color: const Color(0xFFF58842),
-            fontSize: 24,
+            fontSize: 24.sp,
             fontFamily: 'League Gothic',
             fontWeight: FontWeight.w400,
-            height: 1.17,
+            height: 1.17.h,
             letterSpacing: 1.50,
           ),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 10.h),
         RRRightArrowTile(
           title: "Privacy Policy",
+          fontWeight: FontWeight.w500,
           onTap: () {
-            // Navigate to privacy policy page
             Get.toNamed(AppRoutes.privacyPolicy);
           },
         ),
         RRRightArrowTile(
           title: "Terms of Use",
+          fontWeight: FontWeight.w500,
           onTap: () {
-            // Navigate to terms of use page
             Get.toNamed(AppRoutes.termsModal);
           },
         ),
         RRRightArrowTile(
-          title: "Right Route Subscriber Agreement",
+          title: "Disclaimer",
+          fontWeight: FontWeight.w500,
           onTap: () {
-            // Navigate to subscriber agreement page
-            Get.toNamed(AppRoutes.subscriberAgreement);
+            // Replace with appropriate route
           },
         ),
+      ],
+    );
+  }
 
-        //==========================  logout section  ===========================
+  Widget _buildVersion() {
+    return Text(
+      "Version 1.00.0",
+      style: TextStyle(
+        color: AppColors.orange,
+        fontSize: 18.sp,
+        fontFamily: 'Lato',
+        fontWeight: FontWeight.w500,
+        height: 1.56.h,
+      ),
+    );
+  }
+
+  Widget _buildLogoutSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         RRRightArrowTile(
-          title: "Log out",
+          title: "Logout",
+          fontWeight: FontWeight.w500,
           onTap: () {
             Get.dialog(
               Dialog(
@@ -504,14 +442,14 @@ class AccountScreen extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Color(0xFFB71C1C),
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(4.r),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12.w, vertical: 8.h),
                         child: Row(
                           children: [
                             Icon(
@@ -526,14 +464,14 @@ class AccountScreen extends StatelessWidget {
                               },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 4),
+                                    horizontal: 12.w, vertical: 4.h),
                                 minimumSize: Size(0, 0),
                               ),
                               child: Text(
                                 'CANCEL',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 12,
+                                  fontSize: 12.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -541,14 +479,11 @@ class AccountScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-
-                      // Message content
                       Container(
                         padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // NOTE: text
                             RichText(
                               text: TextSpan(
                                 children: [
@@ -556,7 +491,7 @@ class AccountScreen extends StatelessWidget {
                                     text: 'NOTE: ',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 14,
+                                      fontSize: 14.sp,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -564,23 +499,24 @@ class AccountScreen extends StatelessWidget {
                                     text: 'Are you sure you want to logout?',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 14,
+                                      fontSize: 14.sp,
                                       fontWeight: FontWeight.normal,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-
-                            SizedBox(height: 16),
-
-                            // Logout button
+                            SizedBox(height: 16.h),
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: () async {
                                   Get.back(); // Close dialog
 
+                                  // Backend Logout
+                                  await LogoutApiService.logout();
+
+                                  // Local Logout
                                   await AuthService.logout();
                                   Get.offAllNamed(AppRoutes.enterEmailScreen);
 
@@ -594,16 +530,16 @@ class AccountScreen extends StatelessWidget {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
                                   foregroundColor: Color(0xFFB71C1C),
-                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  padding: EdgeInsets.symmetric(vertical: 12.h),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4),
+                                    borderRadius: BorderRadius.circular(4.r),
                                   ),
                                 ),
                                 child: Text(
                                   'LOGOUT',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 14,
+                                    fontSize: 14.sp,
                                   ),
                                 ),
                               ),
@@ -620,25 +556,13 @@ class AccountScreen extends StatelessWidget {
         ),
         RRRightArrowTile(
           title: "Delete Account",
+          fontWeight: FontWeight.w500,
           onTap: () {
             // Navigate to delete account screen
             Get.toNamed(AppRoutes.areYouSureDeleteThisAccount);
           },
         ),
       ],
-    );
-  }
-
-  Widget _buildVersion() {
-    return Text(
-      "Version 0.0.0",
-      style: TextStyle(
-        color: AppColors.orange,
-        fontSize: 18,
-        fontFamily: 'Lato',
-        fontWeight: FontWeight.w500,
-        height: 1.56,
-      ),
     );
   }
 
@@ -650,7 +574,7 @@ class AccountScreen extends StatelessWidget {
         },
         child: Container(
           width: double.infinity,
-          height: 50,
+          height: 58.h,
           decoration: BoxDecoration(
             color: AppColors.orange,
             borderRadius: BorderRadius.circular(10.r),
@@ -661,10 +585,10 @@ class AccountScreen extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.white,
-              fontSize: 24,
+              fontSize: 24.sp,
               fontFamily: 'League Gothic',
               fontWeight: FontWeight.w400,
-              height: 1.17,
+              height: 1.17.h,
               letterSpacing: 2,
             ),
           ),

@@ -6,6 +6,7 @@ import 'package:right_routes/core/routes/all_routes.dart';
 import '../../../utils/assets_manager.dart';
 import '../../../utils/colors.dart';
 import '../terms_of_service/terms_of_service.dart';
+
 class WeLoggedYou extends StatelessWidget {
   const WeLoggedYou({super.key});
 
@@ -21,19 +22,19 @@ class WeLoggedYou extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 40),
+                SizedBox(height: 40.h),
+
                 /// LOGO
                 Center(
                   child: Container(
-                    width: 225,
-                    height: 112,
+                    width: 225.w,
+                    height: 112.h,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(ImageManager.splashScreenLogo),
@@ -42,30 +43,30 @@ class WeLoggedYou extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 21),
+                SizedBox(height: 21.h),
                 Text(
                   'We’ve logged you in',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 25,
+                    fontSize: 25.sp,
                     fontFamily: 'Lato',
                     fontWeight: FontWeight.w700,
-                    height: 1.12,
+                    height: 1.12.h,
                   ),
                 ),
-                SizedBox(height: 21),
+                SizedBox(height: 21.h),
                 SizedBox(
                   child: Text(
                     'You can now continue to Right Route. If you ve forgotten your password, you can choose a new one now or update it from your account Settings another time.',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       fontFamily: 'Lato',
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-                SizedBox(height: 29),
+                SizedBox(height: 29.h),
 
                 // ======================== BUTTON ======================
                 /// CONTINUE BUTTON
@@ -80,11 +81,11 @@ class WeLoggedYou extends StatelessWidget {
                     print('Its clicked ');
                   },
                   child: Container(
-                    width: 392,
-                    height: 55,
+                    width: 392.w,
+                    height: 55.h,
                     decoration: BoxDecoration(
                       color: AppColors.orange,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
                     alignment: Alignment.center,
                     child: Text(
@@ -92,28 +93,28 @@ class WeLoggedYou extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 24,
+                        fontSize: 24.sp,
                         fontFamily: 'League Gothic',
                         fontWeight: FontWeight.w400,
-                        height: 1.17,
+                        height: 1.17.h,
                         letterSpacing: 2,
                       ),
                     ),
                   ),
                 ),
 
-                SizedBox(height: 25),
+                SizedBox(height: 25.h),
 
                 GestureDetector(
                   onTap: () {
                     Get.toNamed(AppRoutes.changePassword);
                   },
                   child: Container(
-                    width: 392,
-                    height: 55,
+                    width: 392.w,
+                    height: 55.h,
                     decoration: BoxDecoration(
                       color: AppColors.medGray,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
                     alignment: Alignment.center,
                     child: Text(
@@ -121,16 +122,16 @@ class WeLoggedYou extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 24,
+                        fontSize: 24.sp,
                         fontFamily: 'League Gothic',
                         fontWeight: FontWeight.w400,
-                        height: 1.17,
+                        height: 1.17.h,
                         letterSpacing: 2,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 50.h),
               ],
             ),
           ),

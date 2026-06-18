@@ -1,78 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../../../utils/colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:right_routes/global_widgets/custom_info_dialog.dart';
 
 void dialogMap(BuildContext context) {
-  showDialog(
+  showCustomInfoDialog(
     context: context,
-    barrierDismissible: true,
-    builder: (context) {
-      return Dialog(
-        backgroundColor: Colors.transparent,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 1 ,),
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          margin: EdgeInsets.symmetric(horizontal: 5),
-          decoration: BoxDecoration(
-            color: AppColors.medGray,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+    icon: Icon(
+      Icons.location_on,
+      color: Colors.white,
+      size: 24.sp,
+    ),
+    texts: [
+      'The green "S" point is your current location.',
+      'The red "E" point is your ending location for this permit.',
+      'Use a finger to move the Start and End points as close as possible to the start and end locations from your permit. They don\'t have to be exact.',
+      'Pinch the map with two fingers to zoom out. Spread two fingers to zoom in. Move the map with one finger.',
+      'The "S" and "E" points form the boundary into which the waypoints from your permit will fit between.',
+    ],
+  );
+}
 
-              /// -------- TOP: PDF icon + Close icon --------
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  /// Left SVG PDF icon
-                  SvgPicture.asset(
-                    "assets/icons/Vector-hand.svg",
-                    width: 23,
-                    height: 23,
-                    color: Colors.white,
-                  ),
-
-                  /// Close button
-                  GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: SvgPicture.asset("assets/icons/Close-X-Circle.svg",height: 30,width: 30,),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 4),
-              Flexible(
-                child: Text(
-                  "This option gives you a map where you can tap to add waypoints where each turn and exit are specified from your permit directions.",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    height: 1.4,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 15),
-
-              /// -------- MAIN TEXT 02 --------
-              // Flexible(
-              //   child: Text(
-              //     "Saving the photo to this device will make it available to this app.",
-              //     style: const TextStyle(
-              //       color: Colors.white,
-              //       fontSize: 15,
-              //       height: 1.4,
-              //     ),
-              //   ),
-              // )
-
-
-            ],
-          ),
-        ),
-      );
-    },
+void dialogMapForSubsequentPermit(BuildContext context) {
+  showCustomInfoDialog(
+    context: context,
+    icon: Icon(
+      Icons.location_on,
+      color: Colors.white,
+      size: 24.sp,
+    ),
+    texts: [
+      'The green "S" point is location of the previous permit\'s end point. DO NOT MOVE THIS POINT.',
+      'Move the red "E" point near the ending location for this permit.',
+    ],
   );
 }

@@ -1,85 +1,72 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:right_routes/core/constants/services/api_client.dart';
 import '../../../core/constants/api_config/api_config.dart';
 
 class RegisterApiService {
   Future<Map<String, dynamic>> register({
-    required String emailToken,
+    required String email,
     required String password,
     bool isTouchIdEnabled = false,
     bool termsAgreed = true,
   }) async {
     try {
-      final url = Uri.parse(ApiConfig.fullRegisterUrl);
+      final url = Uri.parse(ApiConfig.fullCreatePasswordUrl);
+      debugLog('REGISTER', 'POST $url | email: $email');
 
-      print('═══════════════════════════════════════════════════');
-      print('🚀 REGISTER API CALL STARTED');
-      print('📍 URL: $url');
-      print('═══════════════════════════════════════════════════');
-
-      // 🔥 Request Body (NO email, NO email_token here)
-      final requestBody = {
-        'password': password,
-        'is_touch_id_enabled': isTouchIdEnabled,
-        'terms_agreed': termsAgreed,
-      };
-
-      print('📦 Request Body:');
-      print('   Password: $password');
-      print('   Touch ID Enabled: $isTouchIdEnabled');
-      print('   Terms Agreed: $termsAgreed');
-      print('');
-      print('📋 Headers:');
-      print('   X-Email-Token: $emailToken');
-      print('═══════════════════════════════════════════════════');
-
-      final response = await http.post(
+      final response = await ApiClient.post(
         url,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Email-Token': emailToken, // 🔥 Token in Header
-        },
-        body: jsonEncode(requestBody),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+          'is_touch_id_enabled': isTouchIdEnabled,
+          'terms_agreed': termsAgreed,
+        }),
+        requireAuth: false,
       );
 
-      print('');
-      print('═══════════════════════════════════════════════════');
-      print('✅ REGISTER API RESPONSE RECEIVED');
-      print('📊 Status Code: ${response.statusCode}');
-      print('📦 Response Body: ${response.body}');
-      print('═══════════════════════════════════════════════════');
-      print('');
+      debugLog('REGISTER', '${response.statusCode} | ${response.body}');
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = jsonDecode(response.body);
-
-        print('🎉 REGISTER SUCCESS:');
-        print('   Message: ${data['message']}');
-        print('   User ID: ${data['user_id']}');
-        print('═══════════════════════════════════════════════════');
-
-        return {
-          'success': true,
-          'data': data,
-        };
+        return {'success': true, 'data': data};
       } else {
-        print('❌ REGISTER ERROR');
-        print('   Status: ${response.statusCode}');
-        print('   Response: ${response.body}');
-
         return {
           'success': false,
-          'message': 'Registration failed',
-          'statusCode': response.statusCode,
+          'message': _extractError(response.body, 'Registration failed')
         };
       }
     } catch (e) {
-      print('🔴 EXCEPTION: $e');
-
+      debugLog('REGISTER', 'EXCEPTION: $e');
       return {
         'success': false,
-        'message': 'Error: $e',
+        'message': 'Network error. Please check your connection.'
       };
     }
+  }
+
+  String _extractError(String body, String fallback) {
+    try {
+      final data = jsonDecode(body);
+      if (data['detail'] != null) {
+        if (data['detail'] is Map) {
+          final detail = data['detail'] as Map;
+          final firstValue = detail.values.first;
+          if (firstValue is List && firstValue.isNotEmpty)
+            return firstValue.first.toString();
+          return firstValue.toString();
+        }
+        return data['detail'].toString();
+      }
+      return data['message']?.toString() ??
+          data['error']?.toString() ??
+          fallback;
+    } catch (_) {
+      return fallback;
+    }
+  }
+
+  void debugLog(String tag, String msg) {
+    print('[$tag] $msg');
   }
 }

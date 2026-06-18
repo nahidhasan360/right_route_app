@@ -1,11 +1,13 @@
 // lib/views/authentication/enter_email_screen/enter_email_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:right_routes/core/routes/all_routes.dart';
 import 'package:right_routes/utils/assets_manager.dart';
 import 'package:right_routes/utils/colors.dart';
 import 'package:right_routes/views/authentication/enter_email_screen/widgets/continue_widgets.dart';
+import 'package:right_routes/controllers/auth/enter_email_for_delete_controller.dart';
 
 class EnterEmailForDelete extends StatelessWidget {
   const EnterEmailForDelete({Key? key}) : super(key: key);
@@ -26,17 +28,17 @@ class EnterEmailForDelete extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: SingleChildScrollView(
             child: SafeArea(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: 15),
+                  SizedBox(height: 15.h),
                   SizedBox(
                     child: Container(
-                      width: 225,
-                      height: 112,
+                      width: 225.w,
+                      height: 112.h,
                       decoration: BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage(ImageManager.splashScreenLogo),
@@ -45,7 +47,7 @@ class EnterEmailForDelete extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 21),
+                  SizedBox(height: 21.h),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -53,18 +55,18 @@ class EnterEmailForDelete extends StatelessWidget {
                         'Enter your email to continue',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 25,
+                          fontSize: 25.sp,
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      SizedBox(height: 21),
+                      SizedBox(height: 21.h),
                       SizedBox(
                         child: Text(
                           "Log in to your Right Route account. If you don't have one, you will be prompted to create one.",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            fontSize: 18.sp,
                             fontFamily: 'Lato',
                             fontWeight: FontWeight.w500,
                           ),
@@ -72,7 +74,7 @@ class EnterEmailForDelete extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 28),
+                  SizedBox(height: 28.h),
                   Container(
                     width: double.infinity,
                     constraints: BoxConstraints(
@@ -82,17 +84,17 @@ class EnterEmailForDelete extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: AppColors.medGray,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
                     child: TextFormField(
                       controller: controller.emailController,
                       onChanged: (value) => controller.updateEmail(value),
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontFamily: 'Lato',
                         fontWeight: FontWeight.w400,
-                        height: 1.4,
+                        height: 1.4.h,
                         letterSpacing: 0.2,
                       ),
                       cursorColor: Color(0xFFFFFFFF),
@@ -101,16 +103,16 @@ class EnterEmailForDelete extends StatelessWidget {
                         hintText: "Email",
                         hintStyle: TextStyle(
                           color: Color(0xFFBFBFBF),
-                          fontSize: 16,
+                          fontSize: 16.sp,
                           fontFamily: 'Lato',
                           fontWeight: FontWeight.w400,
                         ),
                         isDense: false,
                         contentPadding: EdgeInsets.only(
-                          top: 15,
-                          left: 15,
-                          right: 10,
-                          bottom: 10,
+                          top: 15.h,
+                          left: 15.w,
+                          right: 10.w,
+                          bottom: 10.h,
                         ),
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
@@ -122,7 +124,7 @@ class EnterEmailForDelete extends StatelessWidget {
                       keyboardType: TextInputType.emailAddress,
                     ),
                   ),
-                  SizedBox(height: 25),
+                  SizedBox(height: 25.h),
                   ContinueWidgets(
                     text: 'CONTINUE',
                     width: double.infinity,
@@ -139,23 +141,5 @@ class EnterEmailForDelete extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-// lib/views/authentication/enter_email_screen/enter_email_controller.dart
-
-class EnterEmailForDeleteController extends GetxController {
-  final TextEditingController emailController = TextEditingController();
-
-  RxString email = ''.obs;
-
-  void updateEmail(String value) {
-    email.value = value;
-  }
-
-  @override
-  void onClose() {
-    emailController.dispose();
-    super.onClose();
   }
 }

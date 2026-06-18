@@ -16,49 +16,48 @@ class EmailEditWidgets extends StatelessWidget {
     return SizedBox(
       width: 382.w,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,   // IMPORTANT FIX ✔
-        mainAxisAlignment: MainAxisAlignment.start,     // FIX ✔
+        crossAxisAlignment: CrossAxisAlignment.start, // IMPORTANT FIX ✔
+        mainAxisAlignment: MainAxisAlignment.start, // FIX ✔
         children: [
-
           /// TOP TEXT
-           Text(
+          Text(
             "Create your account using",
             style: TextStyle(
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 18.sp,
               fontFamily: 'Lato',
               fontWeight: FontWeight.w500,
-              height: 1.44,
+              height: 1.44.h,
             ),
           ),
 
-          SizedBox(height: 6),
+          SizedBox(height: 6.h),
 
           /// INLINE ROW (email + edit)
           Row(
-            mainAxisSize: MainAxisSize.min,              // FIX ✔ keeps row tight
+            mainAxisSize: MainAxisSize.min, // FIX ✔ keeps row tight
             children: [
               Text(
                 email,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontFamily: 'Lato',
                   fontWeight: FontWeight.w900,
-                  height: 1.44,
+                  height: 1.44.h,
                 ),
               ),
-              SizedBox(width: 6),
+              SizedBox(width: 6.w),
               GestureDetector(
                 onTap: onEditTap,
-                child: const Text(
+                child: Text(
                   "edit",
                   style: TextStyle(
                     color: Color(0xFF9DACF5),
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     fontFamily: 'Lato',
                     fontWeight: FontWeight.w600,
-                    height: 1.44,
+                    height: 1.44.h,
                   ),
                 ),
               ),

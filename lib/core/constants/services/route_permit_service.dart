@@ -6,6 +6,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:right_routes/core/constants/services/api_client.dart';
 import 'package:right_routes/models/route_permit_model.dart';
 import 'package:right_routes/views/home/home_api_constant/home_api_constant.dart';
 
@@ -21,7 +22,7 @@ class RoutePermitService {
 
     debugPrint('🌐 [RoutePermitService] GET → $url');
 
-    final response = await http.get(url, headers: {
+    final response = await ApiClient.get(url, headers: {
       'Content-Type': 'application/json',
     }).timeout(const Duration(seconds: 30));
 
@@ -65,7 +66,7 @@ class RoutePermitService {
     debugPrint('🌐 [RoutePermitService] POST → $url');
 
     try {
-      final response = await http.post(url, headers: {
+      final response = await ApiClient.post(url, headers: {
         'Content-Type': 'application/json',
       }).timeout(const Duration(seconds: 15));
 
@@ -88,7 +89,7 @@ class RoutePermitService {
     debugPrint('🌐 [RoutePermitService] POST → $url');
 
     try {
-      final response = await http.post(url, headers: {
+      final response = await ApiClient.post(url, headers: {
         'Content-Type': 'application/json',
       }).timeout(const Duration(seconds: 15));
 
@@ -123,3 +124,4 @@ class RoutePermitService {
     }
   }
 }
+

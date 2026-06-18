@@ -1,5 +1,5 @@
 class HomeApiConstant {
-  static const String baseUrl = "http://10.10.20.111:8888";
+  static const String baseUrl = "http://16.192.4.30:8002";
 
 
   // ---------------------  above is baseurl ------------------
